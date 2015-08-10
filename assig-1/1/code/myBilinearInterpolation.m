@@ -1,7 +1,7 @@
 function [ output_args ] = myBilinearInterpolation( input_args )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-a=imread('../data/barbaraSmall1.png');      %import image"y.jpg"
+a=imread('../data/barbaraSmall.png');      %import image"y.jpg"
 
 [row col] = size(a);  %3 dimentional array
 zoom_row=4;
