@@ -4,17 +4,17 @@
     %Output Parameters: Output Image
 %%
 
-function [] = myAHE()
+function [] = myCLAHE()
 
-inputImage=imread('../data/barbara.png');
-[row, col, d] = size(inputImage);
+inputImage = imread('../data/crowd.png');
+[row, col] = size(inputImage);
 
-outputImage = zeros(row, col, d);
+outputImage = zeros(row, col);
 window_x = 32;
 window_y = 32;
 
-hand = @(x) calcAHEVal(x)
-outputImage = nlfilter(inputImage,[61 61],hand);
+hand = @(x) calcCLAHEVal(x)
+outputImage = nlfilter(inputImage,[32 32],hand)
 
 % for i=1:row
 %     for j=1:col
@@ -37,18 +37,25 @@ outputImage = nlfilter(inputImage,[61 61],hand);
 imshow(outputImage);
 end
 
-function AHEVal = calcAHEVal(inpMat)
+function CLAHEVal = calcCLAHEVal(inpMat)
+    Th = .06;
     H=imhist(inpMat);
     [N, M] = size(inpMat);
     H=H/(N*M);
-    C = double(zeros(1,255));
+    for i = 1:256
+        if H(i) > Th 
+            H(i) = Th;
+        end
+    end
+    contrastArea = 1 - sum(H);
+    height = contrastArea / 256.00;
+    H = H + floor(height);
+    
     C(1) = H(1)*255;
-
     for (k=2:256)
         C(k)= C(k-1) + (H(k)*255);
     end
-    AHEVal = uint8(C(inpMat(floor((1+N)/2)+1,floor((1+M)/2))+1));
+    CLAHEVal = uint8(C(inpMat(floor((1+N)/2)+1,floor((1+M)/2))+1));
 end
 
 
-    

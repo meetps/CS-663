@@ -1,11 +1,11 @@
-function [ output_args ] = myBilinearInterpolation( input_args )
+function [] = myBilinearInterpolation(input_image,zoom_row,zoom_col)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-a=imread('../data/barbaraSmall.png');      %import image"y.jpg"
+[im , map] =imread(input_image);      %import image"y.jpg"
 
-[row col] = size(a);  %3 dimentional array
-zoom_row=4;
-zoom_col=3;
+[row col] = size(im);  %3 dimentional array
+% zoom_row=4;
+% zoom_col=3;
 %zooming factor
 zr=zoom_row*row;
 zc=zoom_col*col;
@@ -37,10 +37,10 @@ for i=1:zr
         
         if (x2 <= row & x1 <= row & y1 <= col & y2 <= col)
 
-            BL=a(x1,y1);
-            TL=a(x1,y2);
-            BR=a(x2,y1);
-            TR=a(x2,y2);
+            BL=im(x1,y1);
+            TL=im(x1,y2);
+            BR=im(x2,y1);
+            TR=im(x2,y2);
         
             R1=BR*yint+BL*(1-yint);
             R2=TR*yint+TL*(1-yint);
@@ -49,6 +49,11 @@ for i=1:zr
         end
     end
 end
-imshow(im_zoom);
-disp(im_zoom(:,size(im_zoom,2)));
-disp(size(im_zoom));
+iptsetpref('ImshowAxesVisible','on');
+figure('units','normalized','outerposition',[0 0 1 1])
+subplot(1,2,1);
+imshow(im, map), colorbar;
+title('Original Image')
+subplot(1,2,2);
+imshow(im_zoom, map), colorbar;
+title('Zoomed Image');
