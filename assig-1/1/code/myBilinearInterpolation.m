@@ -1,11 +1,10 @@
 function [] = myBilinearInterpolation(input_image,zoom_row,zoom_col)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
-[im , map] =imread(input_image);      %import image"y.jpg"
 
-[row col] = size(im);  %3 dimentional array
-% zoom_row=4;
-% zoom_col=3;
+%myBilinearInterpolation -  This function generates the enlarged image using the bilinearly interpolated data from the original image.
+
+[im , map] =imread(input_image);
+
+[row col] = size(im); 
 %zooming factor
 zr=zoom_row*row;
 zc=zoom_col*col;
@@ -56,4 +55,5 @@ imshow(im, map), colorbar;
 title('Original Image')
 subplot(1,2,2);
 imshow(im_zoom, map), colorbar;
-title('Zoomed Image');
+imwrite(im_zoom,'../images/barbara_bli.png');
+title('Enlarged Image | Bilinear Interpolation');

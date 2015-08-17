@@ -1,11 +1,9 @@
 function [] = myShrinkImageByFactorD(inputImage, D)
-%myShrinkImageByFactorD Summary of this function goes here
-% <To be written sometime soon>   
+
+%myShrinkImageByFactorD -  This Function generates the shrinked image 
 
 [im, map] = imread(inputImage);
 [rows,columns] = size(im);
-disp(rows);
-disp(columns);
 resized_matrix = [];
     for i = 1:rows
         shrink_col = [];
@@ -25,5 +23,7 @@ imshow(im, map), colorbar;
 title('Original Image')
 subplot(1,2,2);
 imshow(resized_matrix, map), colorbar;
-title('Shrinked Image')
+file_name = strcat('../images/barbara_zoom_', num2str(D), '.png');
+imwrite(resized_matrix,file_name);
+title(['Shrinked Image Shrink Factor = ' num2str(D) '.'])
 end

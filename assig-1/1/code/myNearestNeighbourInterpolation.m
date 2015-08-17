@@ -1,6 +1,9 @@
-function []= NearestNeighbourInterpolation() 
-[im, map] = imread('../data/barbaraSmall.png'); %import image"y.jpg" 
-[row col] = size(im); %3 dimentional array
+function []= myNearestNeighbourInterpolation(inputImage) 
+
+%myNearestNeighbourInterpolation - This Function generates the enlarged image using data from nerest neighbours and interpolating them.
+
+[im, map] = imread(inputImage); 
+[row col] = size(im); 
 zoom_row=3; %zooming factor
 zoom_col=2; %zooming factor
 zr=zoom_row*row;
@@ -27,4 +30,5 @@ imshow(im, map), colorbar;
 title('Original Image')
 subplot(1,2,2);
 imshow(im_zoom, map), colorbar;
-title('Zoomed Image');
+imwrite(im_zoom,'../images/barbara_nni.png');
+title('Enlarged Image | Nearest Neighbour Interpolation');
