@@ -32,4 +32,13 @@ function [ histeqimg, C ] = myHE(inputImage)
            end;
        end
    end
-   imshow(histeqimg);
+iptsetpref('ImshowAxesVisible','on');
+figure('units','normalized','outerposition',[0 0 1 1])
+subplot(1,2,1);
+imshow(inputImage, map), colorbar;
+title('Original Image')
+subplot(1,2,2);
+imshow(histeqimg, map), colorbar;
+file_name = strcat(['../images/he_' pathimg(9:length(pathimg)]);
+imwrite(resized_matrix,file_name);
+title(['Histrogram Equalized Image']);
