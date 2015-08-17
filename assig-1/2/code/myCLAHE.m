@@ -4,13 +4,13 @@
     %Output Parameters: Output Image
 %%
 
-function [] = myCLAHE(pathimg)
+function [] = myCLAHE(pathimg,windowsize_x,windowsize_y,th)
 
-inputImage = imread(pathimg);
+[inputImage, map] = imread(pathimg);
 [row, col, d] = size(inputImage);
 
-window_x = 775;
-window_y = 348;
+window_x = windowsize_x;
+window_y = windowsize_y;
 
 for i=1:row
     for j=1:col
@@ -24,7 +24,7 @@ for i=1:row
             if inputImage(i,j,k) == 0
                 outputImage(i,j,k) =0;
             else
-            transformationFunction = calcCLAHEVal(window_matrix);
+            transformationFunction = calcCLAHEVal(window_matrix,th);
             % disp(transformationFunction);
             outputImage(i,j,k) = uint8(transformationFunction(inputImage(i,j,k)));
             end
@@ -37,15 +37,15 @@ subplot(1,2,1);
 imshow(inputImage, map), colorbar;
 title('Original Image')
 subplot(1,2,2);
-imshow(resized_matrix, map), colorbar;
+imshow(outputImage, map), colorbar;
 file_name = strcat(['../images/clahe_0.005_' num2str(window_x) '_' pathimg(9:length(pathimg))]);
-imwrite(resized_matrix,file_name);
+imwrite(outputImage,file_name);
 title(['Contrast Limited A[daptive Histrogram Eq.' num2str(window_x) 'threshold=].005' ])
 imshow(outputImage);
 end
 
-function C = calcCLAHEVal(inpMat)
-    Th = .005;
+function C = calcCLAHEVal(inpMat,th)
+    Th = th;
     H=imhist(inpMat);
     [N, M] = size(inpMat);
     H=H/(N*M);

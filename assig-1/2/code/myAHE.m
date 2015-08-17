@@ -1,10 +1,10 @@
-function [] = myAHE(pathimg)
+function [] = myAHE(pathimg,windowsize_x,windowsize_y)
 
 [inputImage, map] =imread(pathimg);
 [row, col, d] = size(inputImage);
 
-window_x = 60;
-window_y = 60;
+window_x = windowsize_x;
+window_y = windowsize_y;
 
 for i=1:row
     for j=1:col
@@ -27,12 +27,12 @@ end
 iptsetpref('ImshowAxesVisible','on');
 figure('units','normalized','outerposition',[0 0 1 1])
 subplot(1,2,1);
-imshow(inputImage, map), colorbar;
+imshow(inputImage, map),colorbar;
 title('Original Image')
 subplot(1,2,2);
-imshow(resized_matrix, map), colorbar;
+imshow(outputImage, map),colorbar;
 file_name = strcat(['../images/ahe_' num2str(window_x) '_' pathimg(9:length(pathimg))]);
-imwrite(resized_matrix,file_name);
+imwrite(outputImage,file_name);
 title(['Adaptive Histrogram Eq.' num2str(window_x) '.' ])
 imshow(outputImage);
 end

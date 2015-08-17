@@ -1,6 +1,6 @@
 function [] = myLinearContrastStretching(imgpath)
 
-a_inp = imread(imgpath);
+[a_inp , map]= imread(imgpath);
 [x , y, d] = size(a_inp);
 if d==1
     intensity_max = max(max(a_inp));
@@ -16,12 +16,12 @@ end
 iptsetpref('ImshowAxesVisible','on');
 figure('units','normalized','outerposition',[0 0 1 1])
 subplot(1,2,1);
-imshow(inputImage, map), colorbar;
+imshow(a_inp, map), colorbar;
 title('Original Image')
 subplot(1,2,2);
-imshow(histeqimg, map), colorbar;
-file_name = strcat(['../images/lcs_' pathimg(9:length(pathimg)]);
-imwrite(resized_matrix,file_name);
+imshow(out_image, map), colorbar;
+file_name = strcat(['../images/lcs_' imgpath(9:length(imgpath))]);
+imwrite(out_image,file_name);
 title(['Linear Contrast Stretched Image']);
 end
 

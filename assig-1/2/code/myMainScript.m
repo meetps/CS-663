@@ -13,7 +13,7 @@ imagePath = '../data/canyon.png';
 myLinearContrastStretching(imagePath);
 
 % Histogram Equalization
-
+% 
 imagePath = '../data/barbara.png';
 myHE(imagePath);
 imagePath = '../data/TEM.png';
@@ -24,19 +24,26 @@ myHE(imagePath);
 %  Adaptive Histogram Equalization
 
 imagePath = '../data/barbara.png';
-myAHE(imagePath);
+myAHE(imagePath,90,90);
+myAHE(imagePath,10,10);
+myAHE(imagePath,190,190);
 imagePath = '../data/TEM.png';
-myAHE(imagePath);
+myAHE(imagePath,90,90);
+myAHE(imagePath,10,10);
+myAHE(imagePath,190,190);
 imagePath = '../data/canyon.png';
-myAHE(imagePath);
+myAHE(imagePath,170,170);
+myAHE(imagePath,10,10);
+myAHE(imagePath,290,290);
 
 % Contrast Limited Adaptive Histogram Equalization
 
 imagePath = '../data/barbara.png';
-myCLAHE(imagePath);
+myCLAHE(imagePath,90,90,0.01);
 imagePath = '../data/TEM.png';
-myCLAHE(imagePath);
+myCLAHE(imagePath,90,90,0.01);
 imagePath = '../data/canyon.png';
-myCLAHE(imagePath);
+myCLAHE(imagePath,170,250,0.005);
+myCLAHE(imagePath,170,250,0.0025);
 
 toc;

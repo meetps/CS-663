@@ -1,5 +1,5 @@
-function [ histeqimg, C ] = myHE(inputImage)
-   [img, map] = imread(inputImage);
+function [ histeqimg, C ] = myHE(pathimg)
+   [img, map] = imread(pathimg);
    [M, N, d]=size(img);
    if (d==1)  
        H=imhist(img);
@@ -35,10 +35,10 @@ function [ histeqimg, C ] = myHE(inputImage)
 iptsetpref('ImshowAxesVisible','on');
 figure('units','normalized','outerposition',[0 0 1 1])
 subplot(1,2,1);
-imshow(inputImage, map), colorbar;
+imshow(img, map), colorbar;
 title('Original Image')
 subplot(1,2,2);
 imshow(histeqimg, map), colorbar;
-file_name = strcat(['../images/he_' pathimg(9:length(pathimg)]);
-imwrite(resized_matrix,file_name);
+file_name = strcat(['../images/he_' pathimg(9:length(pathimg))]);
+imwrite(histeqimg,file_name);
 title(['Histrogram Equalized Image']);
