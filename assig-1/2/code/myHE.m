@@ -1,23 +1,35 @@
 function [ histeqimg, C ] = myHE(inputImage)
-a_inp = inputImage;
-img=a_inp;
-[M,N]=size(img);
-H=imhist(img);
-H=H/(M*N);
-for (k=1:256)
-C(k)=uint8(sum(H(1:k))*255);
-end;
-%perform mapping
-for (i=1:M)
-for (j=1:N)
-f=double(img(i,j))+1;
-histeqimg(i,j)=C(f);
-end;
-end;
-%note the above loop can be replaced by: %Computing the mapping function
-
-%note the above loop can be replaced by:
-%histeqimg=C(double(img)+1);
-%this will be much faster!
-% figure; % C = uint8(cumsum(H)*255);
-% imshow(histeqimg);
+   [img, map] = imread(inputImage);
+   [M, N, d]=size(img);
+   if (d==1)  
+       H=imhist(img);
+       H=H/(M*N);
+       C(1) = H(1)*255;
+       for (x=2:256)
+          C(x)= C(x-1) + (H(x)*255);
+       end
+       %perform mapping
+       for (i=1:M)
+           for (j=1:N)
+               f=double(img(i,j))+1;
+               histeqimg(i,j)=uint8(C(f));
+           end;
+       end;
+   else
+       for k=1:d
+           H=imhist(img(:,:,k));
+           H=H/(M*N);
+           C(1) = H(1)*255;
+           for (x=2:256)
+               C(x)= C(x-1) + (H(x)*255);
+           end
+           %perform mapping
+           for (i=1:M)
+               for (j=1:N)
+                   f=double(img(i,j,k))+1;
+                   histeqimg(i,j,k)=uint8(C(f));
+               end;
+           end;
+       end
+   end
+   imshow(histeqimg);

@@ -1,5 +1,6 @@
 function [] = myLinearContrastStretching()
-a_inp = imread('../data/barbara.png');
+
+a_inp = imread('../data/lena.jpg');
 [x , y, d] = size(a_inp);
 if d==1
     intensity_max = max(max(a_inp));
@@ -12,7 +13,7 @@ else
 	    out_image(:,:,i) = (a_inp(:,:,i)-intensity_min)*(255/(intensity_max- intensity_min)); 
 	end
 end
-disp(max(max(out_image)));
+disp(max(max(out_image)));  
 imshow(out_image);
 end
 
