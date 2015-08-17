@@ -1,5 +1,1 @@
-pixel axis , colormap in 1.1
-nlfiltr usage
-imhist
-CLAHE
-AHE
+Sab ho gaya Biyatch !
