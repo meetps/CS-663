@@ -1,4 +1,4 @@
-function [] = myLinearContrastStretching(imgpath)
+tfunction [] = myLinearContrastStretching(imgpath)
 
 [a_inp , map]= imread(imgpath);
 [x , y, d] = size(a_inp);

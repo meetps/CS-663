@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-08-29"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-08-28"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,93 +66,90 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">MyMainScript</a></li><li><a href="#2">Bilateral Filtering</a></li></ul></div><h2>MyMainScript<a name="1"></a></h2><pre class="codeinput">tic;
-</pre><h2>Bilateral Filtering<a name="2"></a></h2><pre class="codeinput"><span class="comment">%Loading Input Image</span>
-imgpath = <span class="string">'../data/barbara.mat'</span>
-inputStruct = load(imgpath);
-inputImage = inputStruct.imageOrig;
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Assignment 2 | Image Sharpening</a></li><li><a href="#2">Image Sharpening</a></li></ul></div><h2>Assignment 2 | Image Sharpening<a name="1"></a></h2><pre class="codeinput">tic;
+</pre><h2>Image Sharpening<a name="2"></a></h2><pre class="codeinput"><span class="comment">% Taking input from images</span>
+imgPathArray = {<span class="string">'../data/lionCrop.mat'</span>;<span class="string">'../data/superMoonCrop.mat'</span>};
+scalingArray = [1.5,1.1];
+radiusArray = [1.1,0.3];
+<span class="keyword">for</span> i=1:2
+	imgpath = char(imgPathArray(i));
+	inputStruct = load(imgpath);
+	inputImage = inputStruct.imageOrig;
 
-<span class="comment">% Adding gaussion noise to image</span>
-[ img_x, img_y ] = size(inputImage);
-noise = 0.05*max(max(inputImage))*randn([img_x img_y]);
-corruptedImage = inputImage + noise;
+	<span class="comment">%LCS for Input Image</span>
+	linearContrastStretchedInputImage = mat2gray(myLinearContrastStretching(inputImage));
 
-<span class="comment">% Filtering Image with</span>
-filteredImage = myBilateralFiltering(corruptedImage,1.3,4,5);
+	<span class="comment">% Sharpening</span>
+	[ sharpenedImage ] = myUnsharpMasking(inputImage, scalingArray(i), radiusArray(i));
 
-diffImage = filteredImage - inputImage;
+	<span class="comment">%LCS for Output Image</span>
+	linearContrastStretchedOutputImage = mat2gray(myLinearContrastStretching(sharpenedImage));
 
-RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
-
+	<span class="comment">% Display Images</span>
 	iptsetpref(<span class="string">'ImshowAxesVisible'</span>,<span class="string">'on'</span>);
-	figure(<span class="string">'name'</span>,<span class="string">' bitch'</span>,<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
-	subplot(1,3,1);
-	imshow(mat2gray(inputImage)), colorbar;
-	title(<span class="string">'Input Image'</span>)
-	subplot(1,3,2);
-	imshow(mat2gray(corruptedImage)), colorbar;
-	title(<span class="string">'Noisy Image'</span>)
-	subplot(1,3,3);
-	imshow(mat2gray(filteredImage)), colorbar;
-	title(<span class="string">'Filtered Image'</span>)
-	title(<span class="string">'Filtered Image'</span>)
-
-	name = strcat([<span class="string">'../images/bilateral_filtered_final'</span> imgpath(9:length(imgpath)-3)]);
+	figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+	subplot(1,2,1);
+	imshow(linearContrastStretchedInputImage), colorbar;
+	title(<span class="string">'Linear Contrast Stretched Input Image'</span>)
+	subplot(1,2,2);
+	imshow(linearContrastStretchedOutputImage), colorbar;
+	name = strcat([<span class="string">'../images/sharp_lcs_'</span> imgpath(9:length(imgpath)-3)]);
 	file_name = strcat([name <span class="string">'png'</span>])
-	imwrite(mat2gray(filteredImage),file_name);
+	imwrite(linearContrastStretchedOutputImage,file_name);
+	title(<span class="string">'Linear Contrast Stretched Sharpened Image'</span>);
+<span class="keyword">end</span>
+
 toc;
 </pre><pre class="codeoutput">
-imgpath =
+file_name =
 
-../data/barbara.mat
+../images/sharp_lcs_lionCrop.png
 
 
 file_name =
 
-../images/bilateral_filtered_finalbarbara.png
+../images/sharp_lcs_superMoonCrop.png
 
-Elapsed time is 5.419184 seconds.
-</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+Elapsed time is 1.242668 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-%% MyMainScript
+%% Assignment 2 | Image Sharpening 
 
 tic;
-%% Bilateral Filtering
+%% Image Sharpening 
 
-%Loading Input Image
-imgpath = '../data/barbara.mat'
-inputStruct = load(imgpath);
-inputImage = inputStruct.imageOrig;
+% Taking input from images
+imgPathArray = {'../data/lionCrop.mat';'../data/superMoonCrop.mat'};
+scalingArray = [1.5,1.1];
+radiusArray = [1.1,0.3];
+for i=1:2
+	imgpath = char(imgPathArray(i));
+	inputStruct = load(imgpath);
+	inputImage = inputStruct.imageOrig;
 
-% Adding gaussion noise to image 
-[ img_x, img_y ] = size(inputImage);
-noise = 0.05*max(max(inputImage))*randn([img_x img_y]);
-corruptedImage = inputImage + noise;
+	%LCS for Input Image
+	linearContrastStretchedInputImage = mat2gray(myLinearContrastStretching(inputImage));
 
-% Filtering Image with 
-filteredImage = myBilateralFiltering(corruptedImage,1.3,4,5);
+	% Sharpening
+	[ sharpenedImage ] = myUnsharpMasking(inputImage, scalingArray(i), radiusArray(i));
 
-diffImage = filteredImage - inputImage;
+	%LCS for Output Image
+	linearContrastStretchedOutputImage = mat2gray(myLinearContrastStretching(sharpenedImage));
 
-RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
-
+	% Display Images
 	iptsetpref('ImshowAxesVisible','on');
-	figure('name',' bitch','units','normalized','outerposition',[0 0 1 1])
-	subplot(1,3,1);
-	imshow(mat2gray(inputImage)), colorbar;
-	title('Input Image')
-	subplot(1,3,2);
-	imshow(mat2gray(corruptedImage)), colorbar;
-	title('Noisy Image')
-	subplot(1,3,3);
-	imshow(mat2gray(filteredImage)), colorbar;
-	title('Filtered Image')
-	title('Filtered Image')
-	
-	name = strcat(['../images/bilateral_filtered_final' imgpath(9:length(imgpath)-3)]);
+	figure('units','normalized','outerposition',[0 0 1 1])
+	subplot(1,2,1);
+	imshow(linearContrastStretchedInputImage), colorbar;
+	title('Linear Contrast Stretched Input Image')
+	subplot(1,2,2);
+	imshow(linearContrastStretchedOutputImage), colorbar;
+	name = strcat(['../images/sharp_lcs_' imgpath(9:length(imgpath)-3)]);
 	file_name = strcat([name 'png'])
-	imwrite(mat2gray(filteredImage),file_name);
-toc;
+	imwrite(linearContrastStretchedOutputImage,file_name);
+	title('Linear Contrast Stretched Sharpened Image');
+end
 
+toc;
 ##### SOURCE END #####
 --></body></html>
