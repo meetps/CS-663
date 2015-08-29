@@ -39,14 +39,17 @@ for i = 1:origImageSize(1)
 		        patch = window(patchxMin:patchxMax,patchyMin:patchyMax);
 		        [ patchX , patchY ] = size(patch);
 
-		        patch = patch(1:min(patchX,baseX),1:min(patchY,baseY));
-		        normBasePatch = basePatch(1:min(patchX,baseX),1:min(patchY,baseY));
-
-		        [x_len,y_len] = meshgrid(-(i-1):size(patch,2)-i,-(j-1):size(patch,1)-j);
-                spaceGaussian = exp(-(x_len.^2+y_len.^2)/(2*1^2));
+		        if(patchX==baseX && patchY==baseY)
+                    diffPatch = basePatch - patch;                    
+                else
+                    patch = patch(1:min(patchX,baseX),1:min(patchY,baseY));
+                    normBasePatch = basePatch(1:min(patchX,baseX),1:min(patchY,baseY));
+                    diffPatch = normBasePatch - patch;
+                end
+% 		        [x_len,y_len] = meshgrid(-(i-1):size(patch,2)-i,-(j-1):size(patch,1)-j);
+%                 spaceGaussian = exp(-(x_len.^2+y_len.^2)/(2*1^2));
                 
-                diffPatch = normBasePatch - patch;
-                diffPatch = diffPatch.*spaceGaussian;
+%                 diffPatch = diffPatch.*spaceGaussian;
 		        weight(k,l) = sum(sum(diffPatch.^2))/(size(diffPatch,1)*size(diffPatch,2));
         	end
         end
