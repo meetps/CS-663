@@ -42,11 +42,15 @@ for i = 1:origImageSize(1)
 		        patch = patch(1:min(patchX,baseX),1:min(patchY,baseY));
 		        normBasePatch = basePatch(1:min(patchX,baseX),1:min(patchY,baseY));
 
-		        diffPatch = normBasePatch - patch;
+		        [x_len,y_len] = meshgrid(-(i-1):size(patch,1)-i,-(j-1):size(patch,2)-j);
+                spaceGaussian = exp(-(x_len.^2+y_len.^2)/(2*SD_Space^2));
+                
+                diffPatch = normBasePatch - patch;
 		        weight(k,l) = sum(sum(diffPatch.^2))/(size(diffPatch,1)*size(diffPatch,2));
         	end
         end
-
+        
+        % applying gaussian over the difference of the patches
         windowWeight = exp(-weight/(sd^2));
         windowWeight = windowWeight/(sum(sum(windowWeight)));
 
