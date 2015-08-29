@@ -1,13 +1,14 @@
 tic;
 
-%% Bilateral Filtering
+%% Patch Based Filtering
 
 %Loading Input Image
 imgpath = '../data/barbara.mat'
 inputStruct = load(imgpath);
 inputImage = inputStruct.imageOrig;
 
-sd_array = [2];	
+%Filtering with optimum sd = 4 and sd*1.1 and sd*0.9
+sd_array = [4.05,4.5,4.95];	
 
 % Filtering Image with Optimal Value
 windowSize = 12;
@@ -39,7 +40,7 @@ for i=1:3
 		
 		disp(RMSD);
 	%Save Image	
-		name = strcat(['../images/patch_filtered_final_' num2str(sd_array(i)) '_' imgpath(9:length(imgpath)-3)]);
+		name = strcat(['../images/patch_filtered_' num2str(sd_array(i)) '_' imgpath(9:length(imgpath)-3)]);
 		file_name = strcat([name 'png'])
 		imwrite(mat2gray(filteredImage),file_name);
 end
