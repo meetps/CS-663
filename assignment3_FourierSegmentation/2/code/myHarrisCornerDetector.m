@@ -39,9 +39,9 @@ function [] = myHarrisCornerDetector()
     figure, imshow(mat2gray(E1)); % display result
     figure, imshow(mat2gray(E2));
     
-    % part 2- Compute Matrix R which contains for every point the cornerness score.
+    % part 2- Compute Matrix cornerMeasure which contains for every point the cornerness score.
     [r c]=size(Ix2);
-    R = zeros(r, c);
+    cornerMeasure = zeros(r, c);
     k = 0.04;
     for i=1:r
         for j=1:c
@@ -50,32 +50,33 @@ function [] = myHarrisCornerDetector()
 %          IxIy1= sum(sum(IxIy(i-1:i+1,j-1:j+1)));
 
          M=[Ix2 IxIy; IxIy Iy2];
-         R(i,j)=det(M)-k*trace(M).^2; %(1) Build autocorrelation matrix for every singe pixel considering a window of size 3x3
+         cornerMeasure(i,j)=det(M)-k*trace(M).^2; %(1) Build autocorrelation matrix for every singe pixel considering a window of size 3x3
         end
     end
-    figure, imshow(mat2gray(R)); % display result
-    
-    % Part 3 - Select for E and R the 81 most salient points
-    % Get the coordinates with maximum cornerness responses
-    % Write a function to obtain the 81 most salient points
-    numPts = 81;
-    [sortR,RIX] = sort(R(:),'descend');
-    [a, b] = ind2sub([r c],RIX);%The mapping from linear indexes to subscript equivalents for the matrix
-    figure; imshow(I, []); hold on; xlabel('Max 81 points');% Get the coordinates with maximum cornerness responses     
-    for i=1:81, 
-        plot(a(i), b(i), 'r+'); 
-    end  
+%     figure, imshow(mat2gray(cornerMeasure)); % display result
+    disp(cornerMeasure);
 
-    % Part 4 - Build  a  function  to  carry  out  non-maximal  suppression  for  E  and
-    % R.  Again, the 81 most salient points using a non-maximal suppression of 1111 pixels.
-    R1= ordfilt2(R,121,ones(11));% Get the coordinates with maximum cornerness responses
-    R2=(R1==R) & (R > 10);
-    [sortR2,R2IX] = sort(R2(:),'descend');
-    [a, b] = ind2sub([r c],R2IX); %The mapping from linear indexes to subscript equivalents for the matrix
-    figure; imshow(I, []); hold on; xlabel('Max 81 points'); %labeling along with X axis    
-    for i=1:81 
-        plot(a(i), b(i), 'r+'); 
-    end
+%     % Part 3 - Select for E and cornerMeasure the 81 most salient points
+%     % Get the coordinates with maximum cornerness responses
+%     % Write a function to obtain the 81 most salient points
+%     numPts = 81;
+%     [sortR,RIX] = sort(cornerMeasure(:),'descend');
+%     [a, b] = ind2sub([r c],RIX);%The mapping from linear indexes to subscript equivalents for the matrix
+%     figure; imshow(I, []); hold on; xlabel('Max 81 points');% Get the coordinates with maximum cornerness responses     
+%     for i=1:81, 
+%         plot(a(i), b(i), 'r+'); 
+%     end  
+% 
+%     % Part 4 - Build  a  function  to  carry  out  non-maximal  suppression  for  E  and
+%     % cornerMeasure.  Again, the 81 most salient points using a non-maximal suppression of 1111 pixels.
+%     R1= ordfilt2(cornerMeasure,121,ones(11));% Get the coordinates with maximum cornerness responses
+%     R2=(R1==cornerMeasure) & (cornerMeasure > 10);
+%     [sortR2,R2IX] = sort(R2(:),'descend');
+%     [a, b] = ind2sub([r c],R2IX); %The mapping from linear indexes to subscript equivalents for the matrix
+%     figure; imshow(I, []); hold on; xlabel('Max 81 points'); %labeling along with X axis    
+%     for i=1:81 
+%         plot(a(i), b(i), 'r+'); 
+%     end
     
 end
 
