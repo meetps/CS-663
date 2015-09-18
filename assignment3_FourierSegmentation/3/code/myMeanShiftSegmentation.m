@@ -1,19 +1,21 @@
-function [ OutputImage,InputImage] = myMeanShiftSegmentation(sigma_S,sigma_I,noOfNeighbours)
-% Implement segmentation and filtering using mean-shift.
+function [ OutputImage] = myMeanShiftSegmentation( max_iter,sigma_S,sigma_I,noOfNeighbours)
+% Implement segmentation of image using mean-shift.
 
-    max_iter = 20;  
-
-    InputImage = imread(strcat('../data/baboonColor.png'));
+    %% Optimal value: max_iter=5, sigma_S=16, sigma_I=48, noOfNeighbours=you can take 100 or 200 or 300
+    
+    InputImage = imread('../data/baboonColor.png');
     InputImage=mat2gray(InputImage);
-    filter = fspecial('gaussian', [5 5], 1);
-    InputImage = imfilter(InputImage, filter, 'same');
+%     filter = fspecial('gaussian', [5 5], 1);
+%     InputImage = imfilter(InputImage, filter, 'same');
+
+    % undersample to reduce computations
+    InputImage = imresize(InputImage, 0.5);
     inputImageSize = size(InputImage);
     OutputImage = zeros(inputImageSize);
 
-    % Produce the samples and set values
+    % Produce 5-d feature space for knnsearch
     nSamples = inputImageSize(1)*inputImageSize(2);
     samples = zeros(5, nSamples);
-
     for i=1:inputImageSize(1)
         for j=1:inputImageSize(2)
             samples(:, inputImageSize(2)*i-inputImageSize(2)+j) = [i; j; InputImage(i, j, 1); InputImage(i, j, 2); InputImage(i, j, 3)];
@@ -23,28 +25,36 @@ function [ OutputImage,InputImage] = myMeanShiftSegmentation(sigma_S,sigma_I,noO
     iter=0;
 
     X = samples';
+    X(:, 3:5) = X(:, 3:5)*255/(1.414*sigma_I);
+    X(:, 1:2) = X(:, 1:2)/(1.414*sigma_S);
     output = X;
     while(iter<max_iter)
         [IDX, D] = knnsearch(X, X, 'k', noOfNeighbours);
         for i=1:nSamples
-            weights = exp(-(D(i,:).^2)/2*(sigma_S^2)*(sigma_I^2));
+            weights = exp(-(D(i,:).^2));
             sum_weights = sum(weights);
             weights = weights';
             weights = [weights, weights, weights];
+            % finding mean
             output(i, 3:5) = sum(weights.*(X(IDX(i,:),3:5)))/sum_weights;
-            
         end
         X = output;
         iter = iter+1;
-        disp(iter);
+%         disp(iter);
     end
     
+    % produce output
     for i=1:inputImageSize(1)
         for j=1:inputImageSize(2)
-            OutputImage(:,:,1) = output(inputImageSize(2)*i-inputImageSize(2)+j,3);
-            OutputImage(:,:,2) = output(inputImageSize(2)*i-inputImageSize(2)+j,4);
-            OutputImage(:,:,3) = output(inputImageSize(2)*i-inputImageSize(2)+j,5);
+            OutputImage(i,j,1) = output(inputImageSize(2)*i-inputImageSize(2)+j,3);
+            OutputImage(i,j,2) = output(inputImageSize(2)*i-inputImageSize(2)+j,4);
+            OutputImage(i,j,3) = output(inputImageSize(2)*i-inputImageSize(2)+j,5);
         end
     end
+    OutputImage = imresize(OutputImage, 2);
     
+    % remove this part of code during final implementation
+    name = strcat(['../MeanShift/' num2str(sigma_S) '_' num2str(sigma_I) '_' num2str(noOfNeighbours) '_max_iter' num2str(max_iter)]);
+    file_name = strcat([name '.png'])
+    imwrite(mat2gray(OutputImage),file_name);
 end
