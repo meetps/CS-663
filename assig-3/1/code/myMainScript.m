@@ -7,12 +7,12 @@ inputStruct = load('../data/boat.mat');
 inputImage = inputStruct.imageOrig;
 [ img_x, img_y ] = size(inputImage);
 
-% min(RMSD) = at D0* = 86
-d0 = 83;
+% min(RMSD) = at D0* = 84
+d0 = 84;
 
 % Display the ButterWorth Filter (2nd order ,ctuoff =83)
 [H, filteredImage] = myButterWorthFiltering(inputImage,2,d0);
-imshow(H);
+imshow(H),colorbar;title('ButterWorth Filter in Frequency Domain')
 
 
 %% ButterWorth Filter Part 
@@ -46,7 +46,7 @@ for i=1:3
 			title('Noisy Image')
 			subplot(1,3,3);
 			imshow(mat2gray(filteredImage)), colorbar;
-			title('Filtered Image')
+			title(['Filtered Image for D0*' num2str(frequency_cutoff_array(i))])
 
 		%Save Image	
 		name = strcat(['../images/butterworth_filter_final_' num2str(frequency_cutoff_array(i)) '.']);
@@ -90,12 +90,25 @@ for i=1:5
 	% Applying the Filter to the  Orig Image
 	inverseImage = ifft2(filteredImage);
 	outputImage=sqrt(real(inverseImage).^2+imag(inverseImage).^2);
-	imshow(mat2gray(outputImage)),colorbar; title(['Image with filter of radius = ' num2str(radius_array(i))]);
+
+	%Display Images
+			iptsetpref('ImshowAxesVisible','on');
+			figure('units','normalized','outerposition',[0 0 1 1])
+			mainFig= subplot(1,2,1);
+			imshow(mat2gray(inputImage)), colorbar;
+			title('Original Image')
+			subplot(1,2,2);
+			imshow(mat2gray(outputImage)), colorbar;
+			title(['Image with filter of radius = ' num2str(radius_array(i))]);
+	%Save Image	
+		name = strcat(['../images/energy_analysis_final_' num2str(nearest_percentage_array(i)) '.']);
+		file_name = strcat([name 'png'])
+		imwrite(mat2gray(outputImage),file_name);
 
 	%Calculating RMSD between Orig Image and Filtered Image
 	diffImage = outputImage - inputImage;
 	RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
 	RMSD_array(i) = RMSD;
-	disp(['RMSD =' RMSD]);
+	disp(['RMSD =' num2str(RMSD)]);
 end
 toc;
