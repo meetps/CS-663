@@ -4,12 +4,12 @@ function [] = myHarrisCornerDetector()
 
     imstruct = load('../data/boat.mat');
     img=imstruct.imageOrig; % Step 0: Read Image
-    figure, imshow(mat2gray(img));title('Original Image');
+    figure, imshow(mat2gray(img)),colorbar;title('Original Image');
     I=im2double(img);
     I = I/max(max(I));
     G = fspecial('gaussian', [3 3] ,1);
     I = imfilter(I, G, 'same');
-    figure, imshow(mat2gray(I)),title('Smoothened Image after Gaussion Filter');
+    figure, imshow(mat2gray(I)),colorbar;title('Smoothened Image after Gaussion Filter');
 %     dx = [-1 0 1; -1 0 1; -1 0 1]; % image derivatives
 %     dy = dx';
 %     Ix = imfilter(I, dx);    % Step 1: Compute the image derivatives Ix and Iy
@@ -18,11 +18,11 @@ function [] = myHarrisCornerDetector()
     
     g = fspecial('gaussian', [6 6] ,2); % Step 2: Generate Gaussian filter 'g' of size 9x9 and standard deviation Sigma=2.
     Ix2 = imfilter(Ix.^2, g, 'same'); % Step 3: Smooth the squared image derivatives to obtain Ix2, Iy2 and IxIy
-    figure, imshow(mat2gray(Ix2));title('X derivative');
+    figure, imshow(mat2gray(Ix2)),colorbar;title('X derivative');
     Iy2 = imfilter(Iy.^2, g, 'same');
-    figure, imshow(mat2gray(Iy2));title('Y derivative');
+    figure, imshow(mat2gray(Iy2)),colorbar;title('Y derivative');
     IxIy = imfilter(Ix.*Iy, g, 'same');
-    figure, imshow(mat2gray(IxIy)); %Display the images obtained in different steps
+    figure, imshow(mat2gray(IxIy)),colorbar,title('Derivative Product Ix*Iy'); %Display the images obtained in different steps
 
     [r c]=size(Ix2);
     R = zeros(r, c);
@@ -51,11 +51,11 @@ function [] = myHarrisCornerDetector()
     superposed = zeros(r, c);
     cornerMeasure = (R>0.5)*250;
     superposed = img+cornerMeasure;
-    figure, imshow(mat2gray(E1));title('Eigenvalue 1'); % display result
-    figure, imshow(mat2gray(E2));title('Eigenvalue 2');
+    figure, imshow(mat2gray(E1)),colorbar;title('Eigenvalue 1'); % display result
+    figure, imshow(mat2gray(E2)),colorbar;title('Eigenvalue 2');
     
-    figure, imshow(mat2gray(cornerMeasure));title('Corner Measure'); % display result
-    figure, imshow(mat2gray(superposed));title('Superposed');
+    figure, imshow(mat2gray(cornerMeasure)),colorbar;title('Corner Measure'); % display result
+    figure, imshow(mat2gray(superposed)),colorbar;title('Superposed');
 %     % Part 3 - Select for E and R the 81 most salient points
 %     % Get the coordinates with maximum cornerness responses
 %     % Write a function to obtain the 81 most salient points
