@@ -1,0 +1,203 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>MyMainScript</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-09-20"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>MyMainScript</h1><pre class="codeinput">tic;
+
+<span class="comment">%Take Input</span>
+inputStruct = load(<span class="string">'../data/boat.mat'</span>);
+inputImage = inputStruct.imageOrig;
+[ img_x, img_y ] = size(inputImage);
+
+<span class="comment">% min(RMSD) = at D0* = 86</span>
+d0 = 83;
+
+<span class="comment">%Display the ButterWorth Filter (2nd order ,ctuoff =83)</span>
+[H, filteredImage] = myButterWorthFiltering(inputImage,2,d0);
+imshow(H);
+
+
+frequency_cutoff_array = [.95, 1 ,1.05];
+
+<span class="keyword">for</span> i=1:3
+
+	<span class="comment">%Normalize Image to range(0,1)</span>
+	normazlizedImage = inputImage/255;
+
+	<span class="comment">%Add gaussion noise with s.d = .1 and mean =0</span>
+	noisyImage = imnoise(normazlizedImage,<span class="string">'gaussian'</span>,0,0.01)*255;
+
+	<span class="comment">% Apply Filter</span>
+	[H, filteredImage] = myButterWorthFiltering(noisyImage,2,frequency_cutoff_array(i)*d0);
+
+		<span class="comment">%Calculating RMSD</span>
+		diffImage = filteredImage - inputImage;
+		RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
+
+		disp(RMSD);
+
+		<span class="comment">%Display Images</span>
+			iptsetpref(<span class="string">'ImshowAxesVisible'</span>,<span class="string">'on'</span>);
+			figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+			mainFig= subplot(1,3,1);
+			imshow(mat2gray(inputImage)), colorbar;
+			title(<span class="string">'Input Image'</span>)
+			subplot(1,3,2);
+			imshow(mat2gray(noisyImage)), colorbar;
+			title(<span class="string">'Noisy Image'</span>)
+			subplot(1,3,3);
+			imshow(mat2gray(filteredImage)), colorbar;
+			title(<span class="string">'Filtered Image'</span>)
+
+		<span class="comment">%Save Image</span>
+		name = strcat([<span class="string">'/home/meetshah1995/Desktop/Dropbox/Third_Year/CS663/cs-663/assignment3_FourierSegmentation/1/images/butterworth_filter_final_'</span> num2str(frequency_cutoff_array(i)) <span class="string">'.'</span>]);
+		file_name = strcat([name <span class="string">'png'</span>])
+		imwrite(mat2gray(filteredImage),file_name);
+<span class="keyword">end</span>
+toc;
+</pre><pre class="codeoutput">   11.2292
+
+
+file_name =
+
+/home/meetshah1995/Desktop/Dropbox/Third_Year/CS663/cs-663/assignment3_FourierSegmentation/1/images/butterworth_filter_final_0.95.png
+
+   11.2259
+
+
+file_name =
+
+/home/meetshah1995/Desktop/Dropbox/Third_Year/CS663/cs-663/assignment3_FourierSegmentation/1/images/butterworth_filter_final_1.png
+
+   11.2441
+
+
+file_name =
+
+/home/meetshah1995/Desktop/Dropbox/Third_Year/CS663/cs-663/assignment3_FourierSegmentation/1/images/butterworth_filter_final_1.05.png
+
+Elapsed time is 1.957917 seconds.
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% MyMainScript
+
+tic;
+
+%Take Input 
+inputStruct = load('../data/boat.mat');
+inputImage = inputStruct.imageOrig;
+[ img_x, img_y ] = size(inputImage);
+
+% min(RMSD) = at D0* = 86
+d0 = 83;
+
+%Display the ButterWorth Filter (2nd order ,ctuoff =83)
+[H, filteredImage] = myButterWorthFiltering(inputImage,2,d0);
+imshow(H);
+
+
+frequency_cutoff_array = [.95, 1 ,1.05];	
+
+for i=1:3
+
+	%Normalize Image to range(0,1)
+	normazlizedImage = inputImage/255;
+
+	%Add gaussion noise with s.d = .1 and mean =0
+	noisyImage = imnoise(normazlizedImage,'gaussian',0,0.01)*255;
+
+	% Apply Filter
+	[H, filteredImage] = myButterWorthFiltering(noisyImage,2,frequency_cutoff_array(i)*d0);
+		
+		%Calculating RMSD
+		diffImage = filteredImage - inputImage;
+		RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
+
+		disp(RMSD);
+
+		%Display Images
+			iptsetpref('ImshowAxesVisible','on');
+			figure('units','normalized','outerposition',[0 0 1 1])
+			mainFig= subplot(1,3,1);
+			imshow(mat2gray(inputImage)), colorbar;
+			title('Input Image')
+			subplot(1,3,2);
+			imshow(mat2gray(noisyImage)), colorbar;
+			title('Noisy Image')
+			subplot(1,3,3);
+			imshow(mat2gray(filteredImage)), colorbar;
+			title('Filtered Image')
+
+		%Save Image	
+		name = strcat(['/home/meetshah1995/Desktop/Dropbox/Third_Year/CS663/cs-663/assignment3_FourierSegmentation/1/images/butterworth_filter_final_' num2str(frequency_cutoff_array(i)) '.']);
+		file_name = strcat([name 'png'])
+		imwrite(mat2gray(filteredImage),file_name);
+end
+toc;
+
+##### SOURCE END #####
+--></body></html>

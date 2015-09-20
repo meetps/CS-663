@@ -1,4 +1,4 @@
-function [ OutputImage] = myMeanShiftSegmentation( max_iter,sigma_S,sigma_I,noOfNeighbours)
+function [ OutputImage] = myMeanShiftSegmentation(max_iter,sigma_S,sigma_I,noOfNeighbours)
 % Implement segmentation of image using mean-shift.
 
     %% Optimal value: max_iter=5, sigma_S=16, sigma_I=48, noOfNeighbours=you can take 100 or 200 or 300
@@ -52,9 +52,4 @@ function [ OutputImage] = myMeanShiftSegmentation( max_iter,sigma_S,sigma_I,noOf
         end
     end
     OutputImage = imresize(OutputImage, 2);
-    
-    % remove this part of code during final implementation
-    name = strcat(['../MeanShift/' num2str(sigma_S) '_' num2str(sigma_I) '_' num2str(noOfNeighbours) '_max_iter' num2str(max_iter)]);
-    file_name = strcat([name '.png'])
-    imwrite(mat2gray(OutputImage),file_name);
 end

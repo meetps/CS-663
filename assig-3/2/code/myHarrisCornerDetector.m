@@ -1,17 +1,15 @@
 function [] = myHarrisCornerDetector()
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
-    
+
 %     Thresh = 50000;
 
     imstruct = load('../data/boat.mat');
     img=imstruct.imageOrig; % Step 0: Read Image
-    figure ;imshow(mat2gray(img));
+    figure, imshow(mat2gray(img));title('Original Image');
     I=im2double(img);
     I = I/max(max(I));
     G = fspecial('gaussian', [3 3] ,1);
     I = imfilter(I, G, 'same');
-    figure; imshow(mat2gray(I));
+    figure, imshow(mat2gray(I)),title('Smoothened Image after Gaussion Filter');
 %     dx = [-1 0 1; -1 0 1; -1 0 1]; % image derivatives
 %     dy = dx';
 %     Ix = imfilter(I, dx);    % Step 1: Compute the image derivatives Ix and Iy
@@ -20,11 +18,11 @@ function [] = myHarrisCornerDetector()
     
     g = fspecial('gaussian', [6 6] ,2); % Step 2: Generate Gaussian filter 'g' of size 9x9 and standard deviation Sigma=2.
     Ix2 = imfilter(Ix.^2, g, 'same'); % Step 3: Smooth the squared image derivatives to obtain Ix2, Iy2 and IxIy
-    figure;imshow(mat2gray(Ix2));
+    figure, imshow(mat2gray(Ix2));title('X derivative');
     Iy2 = imfilter(Iy.^2, g, 'same');
-    figure;imshow(mat2gray(Iy2));
+    figure, imshow(mat2gray(Iy2));title('Y derivative');
     IxIy = imfilter(Ix.*Iy, g, 'same');
-    figure;imshow(mat2gray(IxIy)); %Display the images obtained in different steps
+    figure, imshow(mat2gray(IxIy)); %Display the images obtained in different steps
 
     [r c]=size(Ix2);
     R = zeros(r, c);
@@ -49,21 +47,22 @@ function [] = myHarrisCornerDetector()
          
         end
     end
+
     superposed = zeros(r, c);
     cornerMeasure = (R>0.5)*250;
     superposed = img+cornerMeasure;
-    figure, imshow(mat2gray(E1)); % display result
-    figure, imshow(mat2gray(E2));
+    figure, imshow(mat2gray(E1));title('Eigenvalue 1'); % display result
+    figure, imshow(mat2gray(E2));title('Eigenvalue 2');
     
-    figure, imshow(mat2gray(cornerMeasure)); % display result
-    figure, imshow(mat2gray(superposed));
+    figure, imshow(mat2gray(cornerMeasure));title('Corner Measure'); % display result
+    figure, imshow(mat2gray(superposed));title('Superposed');
 %     % Part 3 - Select for E and R the 81 most salient points
 %     % Get the coordinates with maximum cornerness responses
 %     % Write a function to obtain the 81 most salient points
 %     numPts = 81;
 %     [sortR,RIX] = sort(R(:),'descend');
 %     [a, b] = ind2sub([r c],RIX);%The mapping from linear indexes to subscript equivalents for the matrix
-%     figure; imshow(I, []); hold on; xlabel('Max 81 points');% Get the coordinates with maximum cornerness responses     
+%     title; figure, imshow(I, []); hold on; xlabel('Max 81 points');% Get the coordinates with maximum cornerness responses     
 %     for i=1:81, 
 %         plot(a(i), b(i), 'r+'); 
 %     end  
@@ -74,7 +73,7 @@ function [] = myHarrisCornerDetector()
 %     R2=(R1==R) & (R > 10);
 %     [sortR2,R2IX] = sort(R2(:),'descend');
 %     [a, b] = ind2sub([r c],R2IX); %The mapping from linear indexes to subscript equivalents for the matrix
-%     figure; imshow(I, []); hold on; xlabel('Max 81 points'); %labeling along with X axis    
+%     title; figure, imshow(I, []); hold on; xlabel('Max 81 points'); %labeling along with X axis    
 %     for i=1:81 
 %         plot(a(i), b(i), 'r+'); 
 %     end
