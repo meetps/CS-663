@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>MyMainScript</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-09-20"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-09-20"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>MyMainScript</h1><pre class="codeinput">tic;
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">MyMainScript</a></li><li><a href="#2">ButterWorth Filter Part</a></li><li><a href="#3">Energy Radius Part</a></li></ul></div><h2>MyMainScript<a name="1"></a></h2><pre class="codeinput">tic;
 
 <span class="comment">%Take Input</span>
 inputStruct = load(<span class="string">'../data/boat.mat'</span>);
@@ -76,12 +76,10 @@ inputImage = inputStruct.imageOrig;
 <span class="comment">% min(RMSD) = at D0* = 86</span>
 d0 = 83;
 
-<span class="comment">%Display the ButterWorth Filter (2nd order ,ctuoff =83)</span>
+<span class="comment">% Display the ButterWorth Filter (2nd order ,ctuoff =83)</span>
 [H, filteredImage] = myButterWorthFiltering(inputImage,2,d0);
 imshow(H);
-
-
-frequency_cutoff_array = [.95, 1 ,1.05];
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>ButterWorth Filter Part<a name="2"></a></h2><pre class="codeinput">frequency_cutoff_array = [.95, 1 ,1.05];
 
 <span class="keyword">for</span> i=1:3
 
@@ -98,7 +96,7 @@ frequency_cutoff_array = [.95, 1 ,1.05];
 		diffImage = filteredImage - inputImage;
 		RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
 
-		disp(RMSD);
+		disp([<span class="string">'RMSD ='</span> num2str(RMSD)]);
 
 		<span class="comment">%Display Images</span>
 			iptsetpref(<span class="string">'ImshowAxesVisible'</span>,<span class="string">'on'</span>);
@@ -114,34 +112,58 @@ frequency_cutoff_array = [.95, 1 ,1.05];
 			title(<span class="string">'Filtered Image'</span>)
 
 		<span class="comment">%Save Image</span>
-		name = strcat([<span class="string">'/home/meetshah1995/Desktop/Dropbox/Third_Year/CS663/cs-663/assignment3_FourierSegmentation/1/images/butterworth_filter_final_'</span> num2str(frequency_cutoff_array(i)) <span class="string">'.'</span>]);
+		name = strcat([<span class="string">'../images/butterworth_filter_final_'</span> num2str(frequency_cutoff_array(i)) <span class="string">'.'</span>]);
 		file_name = strcat([name <span class="string">'png'</span>])
 		imwrite(mat2gray(filteredImage),file_name);
 <span class="keyword">end</span>
+</pre><pre class="codeoutput error">Undefined function 'imnoise' for input arguments of type 'single'.
+
+Error in myMainScript (line 27)
+	noisyImage = imnoise(normazlizedImage,'gaussian',0,0.01)*255;
+</pre><h2>Energy Radius Part<a name="3"></a></h2><pre class="codeinput"><span class="comment">% The Following Table encapsulates the enrgy percent vs Radii data</span>
+    <span class="comment">%  93.59 - 4</span>
+    <span class="comment">%  90.69 - 2.225</span>
+    <span class="comment">%  90.53 - 1.4</span>
+    <span class="comment">%  97.13 - 15</span>
+    <span class="comment">%  99.026 - 60</span>
+
+nearest_percentage_array = [88,91,94,97,99];
+radius_array = [1.422,2.225,4,15,60];
+RMSD_array = [0,0,0,0,0];
+percentage_array = [0,0,0,0,0];
+
+<span class="keyword">for</span> i=1:5
+
+	F=fft2(inputImage);
+	F=fftshift(F);
+
+	<span class="comment">%Calculating the Energy of Fourier Transform</span>
+	Energy = sum(sum((abs(F)).^2));
+
+	<span class="comment">% Deduce Filter for image</span>
+	diskfilter = diskFilter(F,radius_array(i));
+	filteredImage = F.*diskfilter;
+
+	<span class="comment">%Calculate Percentage Energy in disked image</span>
+	FilteredImageEnergy = sum(sum(abs(filteredImage).^2));
+	percentage = FilteredImageEnergy/Energy*100;
+	percentage_array(i) = percentage;
+	disp([<span class="string">'Percentage = '</span> num2str(percentage)]);
+
+
+	<span class="comment">% Applying the Filter to the  Orig Image</span>
+	inverseImage = ifft2(filteredImage);
+	outputImage=sqrt(real(inverseImage).^2+imag(inverseImage).^2);
+	imshow(mat2gray(outputImage)),colorbar; title([<span class="string">'Image with filter of radius = '</span> num2str(radius_array(i))]);
+
+	<span class="comment">%Calculating RMSD between Orig Image and Filtered Image</span>
+	diffImage = outputImage - inputImage;
+	RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
+	RMSD_array(i) = RMSD;
+	disp([<span class="string">'RMSD ='</span> RMSD]);
+<span class="keyword">end</span>
 toc;
-</pre><pre class="codeoutput">   11.2292
-
-
-file_name =
-
-/home/meetshah1995/Desktop/Dropbox/Third_Year/CS663/cs-663/assignment3_FourierSegmentation/1/images/butterworth_filter_final_0.95.png
-
-   11.2259
-
-
-file_name =
-
-/home/meetshah1995/Desktop/Dropbox/Third_Year/CS663/cs-663/assignment3_FourierSegmentation/1/images/butterworth_filter_final_1.png
-
-   11.2441
-
-
-file_name =
-
-/home/meetshah1995/Desktop/Dropbox/Third_Year/CS663/cs-663/assignment3_FourierSegmentation/1/images/butterworth_filter_final_1.05.png
-
-Elapsed time is 1.957917 seconds.
-</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% MyMainScript
 
@@ -155,11 +177,12 @@ inputImage = inputStruct.imageOrig;
 % min(RMSD) = at D0* = 86
 d0 = 83;
 
-%Display the ButterWorth Filter (2nd order ,ctuoff =83)
+% Display the ButterWorth Filter (2nd order ,ctuoff =83)
 [H, filteredImage] = myButterWorthFiltering(inputImage,2,d0);
 imshow(H);
 
 
+%% ButterWorth Filter Part 
 frequency_cutoff_array = [.95, 1 ,1.05];	
 
 for i=1:3
@@ -177,7 +200,7 @@ for i=1:3
 		diffImage = filteredImage - inputImage;
 		RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
 
-		disp(RMSD);
+		disp(['RMSD =' num2str(RMSD)]);
 
 		%Display Images
 			iptsetpref('ImshowAxesVisible','on');
@@ -193,9 +216,54 @@ for i=1:3
 			title('Filtered Image')
 
 		%Save Image	
-		name = strcat(['/home/meetshah1995/Desktop/Dropbox/Third_Year/CS663/cs-663/assignment3_FourierSegmentation/1/images/butterworth_filter_final_' num2str(frequency_cutoff_array(i)) '.']);
+		name = strcat(['../images/butterworth_filter_final_' num2str(frequency_cutoff_array(i)) '.']);
 		file_name = strcat([name 'png'])
 		imwrite(mat2gray(filteredImage),file_name);
+end
+
+%% Energy Radius Part
+
+% The Following Table encapsulates the enrgy percent vs Radii data
+    %  93.59 - 4
+    %  90.69 - 2.225
+    %  90.53 - 1.4
+    %  97.13 - 15
+    %  99.026 - 60
+
+nearest_percentage_array = [88,91,94,97,99];
+radius_array = [1.422,2.225,4,15,60];
+RMSD_array = [0,0,0,0,0];
+percentage_array = [0,0,0,0,0];
+
+for i=1:5
+	
+	F=fft2(inputImage);
+	F=fftshift(F);
+	
+	%Calculating the Energy of Fourier Transform
+	Energy = sum(sum((abs(F)).^2));
+	
+	% Deduce Filter for image
+	diskfilter = diskFilter(F,radius_array(i));
+	filteredImage = F.*diskfilter;
+	
+	%Calculate Percentage Energy in disked image
+	FilteredImageEnergy = sum(sum(abs(filteredImage).^2));
+	percentage = FilteredImageEnergy/Energy*100;
+	percentage_array(i) = percentage;
+	disp(['Percentage = ' num2str(percentage)]);
+
+
+	% Applying the Filter to the  Orig Image
+	inverseImage = ifft2(filteredImage);
+	outputImage=sqrt(real(inverseImage).^2+imag(inverseImage).^2);
+	imshow(mat2gray(outputImage)),colorbar; title(['Image with filter of radius = ' num2str(radius_array(i))]);
+
+	%Calculating RMSD between Orig Image and Filtered Image
+	diffImage = outputImage - inputImage;
+	RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
+	RMSD_array(i) = RMSD;
+	disp(['RMSD =' RMSD]);
 end
 toc;
 
