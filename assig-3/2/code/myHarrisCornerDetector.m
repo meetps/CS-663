@@ -1,7 +1,5 @@
 function [] = myHarrisCornerDetector()
 
-%     Thresh = 50000;
-
     imstruct = load('../data/boat.mat');
     img=imstruct.imageOrig; % Step 0: Read Image
     figure, imshow(mat2gray(img)),colorbar;title('Original Image');
@@ -12,7 +10,7 @@ function [] = myHarrisCornerDetector()
     figure, imshow(mat2gray(I)),colorbar;title('Smoothened Image after Gaussion Filter');
 %     dx = [-1 0 1; -1 0 1; -1 0 1]; % image derivatives
 %     dy = dx';
-%     Ix = imfilter(I, dx);    % Step 1: Compute the image derivatives Ix and Iy
+%     Ix = imfilter(I, dx);   
 %     Iy = imfilter(I, dy);
     [Ix Iy] = imgradientxy(I);
     
@@ -56,19 +54,9 @@ function [] = myHarrisCornerDetector()
     
     figure, imshow(mat2gray(cornerMeasure)),colorbar;title('Corner Measure'); % display result
     figure, imshow(mat2gray(superposed)),colorbar;title('Superposed');
-%     % Part 3 - Select for E and R the 81 most salient points
-%     % Get the coordinates with maximum cornerness responses
-%     % Write a function to obtain the 81 most salient points
-%     numPts = 81;
-%     [sortR,RIX] = sort(R(:),'descend');
-%     [a, b] = ind2sub([r c],RIX);%The mapping from linear indexes to subscript equivalents for the matrix
-%     title; figure, imshow(I, []); hold on; xlabel('Max 81 points');% Get the coordinates with maximum cornerness responses     
-%     for i=1:81, 
-%         plot(a(i), b(i), 'r+'); 
-%     end  
-% 
-%     % Part 4 - Build  a  function  to  carry  out  non-maximal  suppression  for  E  and
-%     % R.  Again, the 81 most salient points using a non-maximal suppression of 1111 pixels.
+
+    
+%     Maximal supression
 %     R1= ordfilt2(R,121,ones(11));% Get the coordinates with maximum cornerness responses
 %     R2=(R1==R) & (R > 10);
 %     [sortR2,R2IX] = sort(R2(:),'descend');

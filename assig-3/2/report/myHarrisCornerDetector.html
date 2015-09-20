@@ -68,8 +68,6 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
   </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">function</span> [] = myHarrisCornerDetector()
 
-<span class="comment">%     Thresh = 50000;</span>
-
     imstruct = load(<span class="string">'../data/boat.mat'</span>);
     img=imstruct.imageOrig; <span class="comment">% Step 0: Read Image</span>
     figure, imshow(mat2gray(img)),colorbar;title(<span class="string">'Original Image'</span>);
@@ -124,19 +122,8 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
     figure, imshow(mat2gray(cornerMeasure)),colorbar;title(<span class="string">'Corner Measure'</span>); <span class="comment">% display result</span>
     figure, imshow(mat2gray(superposed)),colorbar;title(<span class="string">'Superposed'</span>);
-<span class="comment">%     % Part 3 - Select for E and R the 81 most salient points</span>
-<span class="comment">%     % Get the coordinates with maximum cornerness responses</span>
-<span class="comment">%     % Write a function to obtain the 81 most salient points</span>
-<span class="comment">%     numPts = 81;</span>
-<span class="comment">%     [sortR,RIX] = sort(R(:),'descend');</span>
-<span class="comment">%     [a, b] = ind2sub([r c],RIX);%The mapping from linear indexes to subscript equivalents for the matrix</span>
-<span class="comment">%     title; figure, imshow(I, []); hold on; xlabel('Max 81 points');% Get the coordinates with maximum cornerness responses</span>
-<span class="comment">%     for i=1:81,</span>
-<span class="comment">%         plot(a(i), b(i), 'r+');</span>
-<span class="comment">%     end</span>
-<span class="comment">%</span>
-<span class="comment">%     % Part 4 - Build  a  function  to  carry  out  non-maximal  suppression  for  E  and</span>
-<span class="comment">%     % R.  Again, the 81 most salient points using a non-maximal suppression of 1111 pixels.</span>
+
+<span class="comment">%     Maximal Supression
 <span class="comment">%     R1= ordfilt2(R,121,ones(11));% Get the coordinates with maximum cornerness responses</span>
 <span class="comment">%     R2=(R1==R) &amp; (R &gt; 10);</span>
 <span class="comment">%     [sortR2,R2IX] = sort(R2(:),'descend');</span>
