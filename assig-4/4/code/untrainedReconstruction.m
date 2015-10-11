@@ -57,7 +57,6 @@ function [] = untrainedReconstruction()
 
     testCoeffs1 = transpose(transpose(Vr)*XTest1);
     predCoeffs1 = transpose(dsearchn(transpose(coeffs), testCoeffs1));
-%     predCoeffs1 = transpose((floor((dsearchn(transpose(coeffs), testCoeffs1)-1)/noOfTrainingImages))+1);
 
     % Now get the testing images from the second testing dataset
     XTest2 = double(zeros([width*breadth noOfTestFolders*noOfTestImages]));
@@ -72,11 +71,10 @@ function [] = untrainedReconstruction()
 
     testCoeffs2 = transpose(transpose(Vr)*XTest2);
     predCoeffs2 = transpose(dsearchn(transpose(coeffs), testCoeffs2));
-%     predCoeffs2 = transpose((floor((dsearchn(transpose(coeffs), testCoeffs2)-1)/noOfTrainingImages))+1);
 
     distances1 = sqrt(sum((transpose(testCoeffs1) - coeffs(:,predCoeffs1(:))).^2));
 
-    distances2 = sqrt(sum((transpose(testCoeffs2) - coeffs(:,predCoeffs2(:))).^2))
+    distances2 = sqrt(sum((transpose(testCoeffs2) - coeffs(:,predCoeffs2(:))).^2));
 
     thresh = 2495;
 

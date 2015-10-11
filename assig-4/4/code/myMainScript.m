@@ -1,6 +1,4 @@
 %% MyMainScript
 
-tic;
-%% Your code here
-
-toc;
+%Testing the Face reconigtion system for untrained images
+untrainedReconstruction();

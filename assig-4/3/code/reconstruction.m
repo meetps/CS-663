@@ -59,6 +59,7 @@ Vs = fliplr(V);
 originalImage = imread(reconstructImgPath);
 originalImage = double(originalImage(:));
 
+figure('units','normalized','outerposition',[0 0 1 1]);
 subplot(2, 5, 10), imshow(reshape(originalImage, width, breadth)/max(originalImage));
 title('Original Image');
 
@@ -73,7 +74,7 @@ for kInd = 1:k_len
     title(['k = ' num2str(k_array(kInd))]);
 end
 
-figure;
+figure('units','normalized','outerposition',[0 0 1 1]);
 
 for kEig = 1:25
     E = Vs(:,kEig);
@@ -82,7 +83,7 @@ for kEig = 1:25
     title(['k = ' num2str(kEig)]);
 end
 
-figure;
+figure('units','normalized','outerposition',[0 0 1 1])
 
 for kEig = 1:25
     E = Vs(:,kEig);

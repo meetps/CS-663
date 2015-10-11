@@ -1,6 +1,10 @@
 %% MyMainScript
 
-tic;
-%% Your code here
+%% ORL Data Set 
 
-toc;
+dataset = 'ORLD';
+faceRecognition(dataset);
+
+%% Yale Data Set 
+dataset = 'Yale';
+faceRecognition(dataset);
