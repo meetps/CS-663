@@ -1,4 +1,5 @@
-%%
+%% Deblurring and Reflection Removal
+% 
 % From the Question it is very clear that the relation between the blur kernel and the image is :
 %
 % $$g_1 = f_1 + f_2 * h_2$$
