@@ -1,0 +1,112 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>deblurring</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-10-21"><meta name="DC.source" content="deblurring.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><p>From the Question it is very clear that the relation between the blur kernel and the image is :</p><p><img src="deblurring_eq06046675349944008440.png" alt="$$g_1 = f_1 + f_2 * h_2$$"></p><p><img src="deblurring_eq02285948975061118147.png" alt="$g_2 = f_1 * h_1 + f_2$"></p><p>When we take Fourier Transform on both sides of the equation we get :</p><p><img src="deblurring_eq14732331783717873105.png" alt="$G_1 = F_1 + F_2 H_2$"> and <img src="deblurring_eq05026376454312038867.png" alt="$G_2 = F_1 H_1 + F_2$"></p><p>We solve the above equations.</p><p>We get the following as the solution for <img src="deblurring_eq05833127179717919777.png" alt="$F_1$"> and <img src="deblurring_eq03109776449890965049.png" alt="$F_2$"> :</p><p><img src="deblurring_eq05143984467177450217.png" alt="$F_1 = \frac{H_2 G_2 - G_1}{H_1 H_2 - 1},$">  and <img src="deblurring_eq12055624389021746098.png" alt="$F_2 = \frac{H_1 G_1 - G_2}{H_1 H_2 - 1}$"></p><p>and the time domain relation as the following :</p><p><img src="deblurring_eq01954287655755564060.png" alt="$f_1 = \mathcal{F}^{-1}(F_1)$"> and <img src="deblurring_eq13288270594655249216.png" alt="$f_2 = \mathcal{F}^{-1}(F_2)$"></p><p>The filters are similar to wiener filters (inverse filters in general) and like all inverse filters they tend to increase indefinitely when the denominator is approaching zero. Here in this case it will reach a similar situation when <img src="deblurring_eq05382623553784987320.png" alt="$H_1H_1$"> tends to 1. This one of the shortcomings of this technique for reflection removal.</p><p>But we always have some noise associated with the images (generally) additve in nature and hence the actual relation between the kernel and the image can be written as follows:</p><p><img src="deblurring_eq10272610829311412266.png" alt="$g_1 = f_1 + f_2 * h_2 + noise_1$"></p><p><img src="deblurring_eq09230997004075269315.png" alt="$g_2 = f_1 * h_1 + f_2 + noise_2$"></p><p>The noise variables are independent and random in nature and it is not possible estimate both <img src="deblurring_eq02802788999758403638.png" alt="$noise_1$"> and <img src="deblurring_eq01400543280676187371.png" alt="$noise_2$"> with the data at helm.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%
+% From the Question it is very clear that the relation between the blur kernel and the image is :
+%
+% $$g_1 = f_1 + f_2 * h_2$$
+% 
+% $g_2 = f_1 * h_1 + f_2$
+%
+% When we take Fourier Transform on both sides of the equation we get :
+%
+% $G_1 = F_1 + F_2 H_2$ and $G_2 = F_1 H_1 + F_2$
+%
+%
+% We solve the above equations.
+%
+% We get the following as the solution for $F_1$ and $F_2$ :
+%
+% $F_1 = \frac{H_2 G_2 - G_1}{H_1 H_2 - 1},$  and $F_2 = \frac{H_1 G_1 - G_2}{H_1 H_2 - 1}$
+%
+% and the time domain relation as the following :
+%
+% $f_1 = \mathcal{F}^{-1}(F_1)$ and $f_2 = \mathcal{F}^{-1}(F_2)$ 
+%
+% The filters are similar to wiener filters (inverse filters in general) 
+% and like all inverse filters they tend to increase indefinitely when the 
+% denominator is approaching zero. Here in this case it will reach a
+% similar situation when $H_1H_1$ tends to 1. This one of the shortcomings
+% of this technique for reflection removal.
+%
+% But we always have some noise associated with the images (generally)
+% additve in nature and hence the actual relation between the kernel and
+% the image can be written as follows:
+%
+% $g_1 = f_1 + f_2 * h_2 + noise_1$
+%
+% $g_2 = f_1 * h_1 + f_2 + noise_2$
+%
+% The noise variables are independent and random in nature and it is not 
+% possible estimate both $noise_1$ and $noise_2$ with the data at helm.
+% 
+
+##### SOURCE END #####
+--></body></html>
