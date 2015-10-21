@@ -1,0 +1,175 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Matrix Proofs and Problems</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-10-22"><meta name="DC.source" content="matrix.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Matrix Proofs and Problems</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Part a</a></li><li><a href="#2">Part b</a></li><li><a href="#3">Part c</a></li><li><a href="#4">Part d</a></li></ul></div><h2>Part a<a name="1"></a></h2><p>Consider a matrix <img src="matrix_eq12487636798360094574.png" alt="$\textbf{A}$"> of size <img src="matrix_eq03421469680577370400.png" alt="$m \times n$">. 	Define <img src="matrix_eq05478931792974840252.png" alt="$\textbf{P}=\textbf{A}^T \textbf{A}$"> and <img src="matrix_eq17828768761790359788.png" alt="$\textbf{Q}=\textbf{A} \textbf{A}^T$">.</p><p>Now, if <img src="matrix_eq14026566295736216432.png" alt="$$\textbf{A}$">$ has dimensions <img src="matrix_eq03421469680577370400.png" alt="$m \times n$">, <img src="matrix_eq11224932951356657572.png" alt="$\textbf{P}$"> has dimensions <img src="matrix_eq14662025674782596410.png" alt="$n \times n$">. Hence if we want to evaluate <img src="matrix_eq13350831769966904941.png" alt="$\textbf{y}^T \textbf{P} \textbf{y}$"> for a (column) vector <img src="matrix_eq00337077414503177338.png" alt="$\textbf{y}$">, <img src="matrix_eq00337077414503177338.png" alt="$\textbf{y}$"> must have dimensions <img src="matrix_eq17754908661825192061.png" alt="$n \times 1$">. This means the product <img src="matrix_eq13350831769966904941.png" alt="$\textbf{y}^T \textbf{P} \textbf{y}$"> will be a scalar.</p><p>Now we have <img src="matrix_eq05055732694375760444.png" alt="$\textbf{y}^T \textbf{P} \textbf{y} = \textbf{y}^T \textbf{A}^T \textbf{A} \textbf{y}$"> Putting <img src="matrix_eq03084049741273516261.png" alt="$\textbf{Z} = \textbf{A}\textbf{y}$">, and noticing that <img src="matrix_eq18029477350654760860.png" alt="$\textbf{Z}^T = \textbf{y}^T \textbf{A}^T$">, we have <img src="matrix_eq07018371256740351804.png" alt="$$\textbf{y}^T \textbf{P} \textbf{y} = \textbf{Z}^T \textbf{Z}$"> Thus the given expression is the dot product of a vector with itself, which is always non-negative. Thus, <img src="matrix_eq02552765929732254263.png" alt="$$\textbf{y}^T \textbf{P} \textbf{y} \geq 0$"></p><p>Similarly, we have for a <img src="matrix_eq17754908661825192061.png" alt="$n \times 1$"> vector <img src="matrix_eq01632361926108831929.png" alt="$\textbf{z}$">, with <img src="matrix_eq13472174474439097986.png" alt="$\textbf{Y} = \textbf{A}\textbf{z}$"> <img src="matrix_eq15896500962753285820.png" alt="$$\textbf{z}^T \textbf{Q} \textbf{z} = \textbf{Y}^T \textbf{Y}$"></p><p>which is again the dot product of a vector with itself, which is always non-negative. Thus, <img src="matrix_eq09161935237879644479.png" alt="$$\textbf{z}^T \textbf{Q} \textbf{z} \geq 0$"></p><p>Now consider an eigenvector <img src="matrix_eq01632361926108831929.png" alt="$\textbf{z}$"> of <img src="matrix_eq15919253871252610913.png" alt="$\textbf{A}^T \textbf{A}$">, where <img src="matrix_eq01632361926108831929.png" alt="$\textbf{z}$"> is a <img src="matrix_eq05716265959686515269.png" alt="$m \times 1$"> vector. We must have for some <img src="matrix_eq07657233533591063549.png" alt="$\lambda$"> <img src="matrix_eq08223071596830731009.png" alt="$$\textbf{A}^T \textbf{A} \textbf{z} = \lambda \textbf{z}$"></p><p>A pre-multiplication by <img src="matrix_eq08984013218160157678.png" alt="$\textbf{z}^T$"> yields <img src="matrix_eq09253713781056434481.png" alt="$$\textbf{z}^T \textbf{A}^T \textbf{A} \textbf{z} = \textbf{z}^T \lambda \textbf{z}$"></p><p>which means <img src="matrix_eq01760684575429341853.png" alt="$$\textbf{z}^T \textbf{A}^T \textbf{A} \textbf{z} = \lambda \textbf{z}^T \textbf{z}$"></p><p>Now the left hand side is positive, as proved above. <img src="matrix_eq04848671723032560064.png" alt="$\textbf{z}^T \textbf{z}$"> is positive, because it is the dot product of a vector with itself. Hence, <img src="matrix_eq07657233533591063549.png" alt="$\lambda$"> must be non-negative.</p><p>Similarly for <img src="matrix_eq01340895900893302368.png" alt="$\textbf{A} \textbf{A}^T$">, consider an eigenvector <img src="matrix_eq01632361926108831929.png" alt="$\textbf{z}$"> of dimension <img src="matrix_eq05716265959686515269.png" alt="$m \times 1$">. Multiplying the eigenvalue equation on the left by <img src="matrix_eq08984013218160157678.png" alt="$\textbf{z}^T$"> we get for some <img src="matrix_eq07657233533591063549.png" alt="$\lambda$"> <img src="matrix_eq12409157232786897524.png" alt="$$\textbf{z}^T \textbf{A} \textbf{A}^T \textbf{z} = \lambda \textbf{z}^T \textbf{z}$"> which again means <img src="matrix_eq07657233533591063549.png" alt="$\lambda$"> is non-negative.</p><p>Hence the eigenvalues of <img src="matrix_eq15919253871252610913.png" alt="$\textbf{A}^T \textbf{A}$"> and <img src="matrix_eq01340895900893302368.png" alt="$\textbf{A} \textbf{A}^T$"> are non-negative.</p><h2>Part b<a name="2"></a></h2><p>If <img src="matrix_eq09938750103736328101.png" alt="$\textbf{u}$"> is an eigenvector of <img src="matrix_eq11224932951356657572.png" alt="$\textbf{P}$"> with eigenvalue <img src="matrix_eq07657233533591063549.png" alt="$\lambda$">, we have <img src="matrix_eq03442600896440035557.png" alt="$$\textbf{A}^T \textbf{A} \textbf{u} = \lambda \textbf{u}$"> Pre-multiply by <img src="matrix_eq07309292561785799618.png" alt="$\textbf{A}^T$"> to give</p><p><img src="matrix_eq13724356988670996336.png" alt="$$\textbf{A} \textbf{A}^T \textbf{A} \textbf{u} = \textbf{A} \lambda \textbf{u}$"></p><p>implying <img src="matrix_eq14260881753913066376.png" alt="$$\textbf{A} \textbf{A}^T \textbf{A} \textbf{u} = \lambda \textbf{A} \textbf{u}$"> Thus <img src="matrix_eq13154187724123994863.png" alt="$\textbf{Au}$"> is an eigenvector of \textbf{Q} with eigenvalue <img src="matrix_eq07657233533591063549.png" alt="$\lambda$">.</p><p>Similarly, if <img src="matrix_eq02875159259364373693.png" alt="$\textbf{v}$"> is an eigenvector of <img src="matrix_eq17037729610202547497.png" alt="$\textbf{Q}$"> with eigenvalue <img src="matrix_eq05371638286043275527.png" alt="$\mu$">, we have by pre-multiplying with <img src="matrix_eq07309292561785799618.png" alt="$\textbf{A}^T$"></p><p><img src="matrix_eq15193397341732028639.png" alt="$$\textbf{A}^T \textbf{A} \textbf{A}^T \textbf{v} = \mu \textbf{A}^T \textbf{v}$"></p><p>Thus <img src="matrix_eq15077099283375304043.png" alt="$\textbf{A}^T \textbf{v}$"> is an eigenvector of <img src="matrix_eq11224932951356657572.png" alt="$\textbf{P}$"> with eigenvalue <img src="matrix_eq05371638286043275527.png" alt="$\mu$">.</p><p>Clearly <img src="matrix_eq09938750103736328101.png" alt="$\textbf{u}$"> has <img src="matrix_eq08984225997457563733.png" alt="$n$"> elements and <img src="matrix_eq02875159259364373693.png" alt="$\textbf{v}$"> has <img src="matrix_eq11319871188381094158.png" alt="$m$"> elements.</p><h2>Part c<a name="3"></a></h2><p>If <img src="matrix_eq09105943267191795652.png" alt="$\textbf{v}_i$"> is an eigenvector of <img src="matrix_eq17037729610202547497.png" alt="$\textbf{Q}$">, we have <img src="matrix_eq18349984354755594444.png" alt="$$\textbf{AA}^T \textbf{v}_i = \lambda_i \textbf{v}_i$"> Defining <img src="matrix_eq07305904609223779029.png" alt="$\textbf{u}_i$"> as <img src="matrix_eq10785167360256594041.png" alt="$$\textbf{u}_i = \frac{\textbf{A}^T \textbf{v}_i}{||\textbf{A}^T \textbf{v}_i||}$"> and substituting it in the previous equation yields</p><p><img src="matrix_eq03827205944241402939.png" alt="$$\textbf{Au}_i = \frac{\lambda_i}{||\textbf{A}^T \textbf{v}_i||} \textbf{v}_i$"></p><p>Define <img src="matrix_eq10190599912419501465.png" alt="$\gamma_i$"> as <img src="matrix_eq07261020324908887096.png" alt="$$\gamma_i = \frac{\lambda_i}{||\textbf{A}^T \textbf{v}_i||}$"></p><p>Clearly <img src="matrix_eq10190599912419501465.png" alt="$\gamma_i$"> are non-negative because <img src="matrix_eq10987481705112842768.png" alt="$\lambda_i$"> are non-negative and the denominator being a norm is non-negative as well.</p><p>Thus there exist some real, non-negative <img src="matrix_eq10190599912419501465.png" alt="$\gamma_i$"> which satisfy <img src="matrix_eq06822348121624917969.png" alt="$$\textbf{Au}_i = \gamma_i \textbf{u}_i$">$</p><h2>Part d<a name="4"></a></h2><p>Consider the product <img src="matrix_eq05741512945354655329.png" alt="$\textbf{U} \Gamma \textbf{V}^T$"> with the matrices as defined in the question.</p><p>We have</p><p>Thus</p><p><img src="matrix_eq1834998435475559.png" alt="$$\textbf{U} \Gamma = [ \gamma_1 \textbf{v}_1 | \gamma_2 \textbf{v}_2 | \cdots | \gamma_m \textbf{v}_m ]$"></p><p>From the previous part each <img src="matrix_eq12578418009683960493.png" alt="$\gamma_{i} \textbf{v}_i$"> can be written as <img src="matrix_eq14003567955221168046.png" alt="$$\gamma_{i} \textbf{v}_i = \textbf{Au}_i$"></p><p>Thus <img src="matrix_eq06106424969662664539.png" alt="$$\textbf{U} \Gamma = [ \textbf{Au}_1 | \textbf{Au}_2 | \cdots | \textbf{Au}_n ]$"></p><p>which means</p><p><img src="matrix_eq03555226652668357984.png" alt="$$\textbf{U} \Gamma \textbf{V}^T = [ \textbf{Au}_1 | \textbf{Au}_2 | \cdots | \textbf{Au}_n ]  [ \textbf{u}_1 | \textbf{u}_2 | \cdots | \textbf{u}_n ]^T$"></p><p>implying</p><p><img src="matrix_eq10278075070791515497.png" alt="$$\textbf{U} \Gamma \textbf{V}^T = \textbf{A} [ \textbf{u}_1 | \textbf{u}_2 | \cdots | \textbf{u}_n ]  [ \textbf{u}_1 | \textbf{u}_2 | \cdots | \textbf{u}_n ]^T$"></p><p>Now given that <img src="matrix_eq04747809448647829870.png" alt="$$\textbf{u}_i \textbf{u}_j = \delta_{ij}$"> we have</p><p><img src="matrix_eq04322446230929950751.png" alt="$$A = \textbf{U} \Gamma \textbf{V}^T$"> where <img src="matrix_eq08796078824778739634.png" alt="$\Gamma$"> is a matrix that has the non-negative <img src="matrix_eq10190599912419501465.png" alt="$\gamma_i$"> on its diagonal elements and zeros on the off-diagonal elements.</p><p>Thus we are done.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Matrix Proofs and Problems
+%
+%% Part a
+% Consider a matrix $\textbf{A}$ of size $m \times n$. 	Define $\textbf{P}=\textbf{A}^T \textbf{A}$ and $\textbf{Q}=\textbf{A} \textbf{A}^T$.
+%
+% Now, if $$\textbf{A}$$ has dimensions $m \times n$, $\textbf{P}$ has dimensions $n \times n$. Hence if we want to evaluate 
+% $\textbf{y}^T \textbf{P} \textbf{y}$ for a (column) vector $\textbf{y}$, $\textbf{y}$ must have dimensions $n \times 1$. 
+% This means the product $\textbf{y}^T \textbf{P} \textbf{y}$ will be a scalar.
+%
+% Now we have $\textbf{y}^T \textbf{P} \textbf{y} = \textbf{y}^T \textbf{A}^T \textbf{A} \textbf{y}$
+% Putting $\textbf{Z} = \textbf{A}\textbf{y}$, and noticing that $\textbf{Z}^T = \textbf{y}^T \textbf{A}^T$, we have 
+% $$\textbf{y}^T \textbf{P} \textbf{y} = \textbf{Z}^T \textbf{Z}$
+% Thus the given expression is the dot product of a vector with itself, which is always non-negative. Thus, 
+% $$\textbf{y}^T \textbf{P} \textbf{y} \geq 0$
+% 
+% Similarly, we have for a $n \times 1$ vector $\textbf{z}$, with $\textbf{Y} = \textbf{A}\textbf{z}$ 
+% $$\textbf{z}^T \textbf{Q} \textbf{z} = \textbf{Y}^T \textbf{Y}$
+% 
+% which is again the dot product of a vector with itself, which is always non-negative. Thus, $$\textbf{z}^T \textbf{Q} \textbf{z} \geq 0$
+%
+% Now consider an eigenvector $\textbf{z}$ of $\textbf{A}^T \textbf{A}$, where $\textbf{z}$ is a $m \times 1$ vector. We must have for some
+% $\lambda$ $$\textbf{A}^T \textbf{A} \textbf{z} = \lambda \textbf{z}$
+% 
+% A pre-multiplication by $\textbf{z}^T$ yields
+% $$\textbf{z}^T \textbf{A}^T \textbf{A} \textbf{z} = \textbf{z}^T \lambda \textbf{z}$
+% 
+% which means
+% $$\textbf{z}^T \textbf{A}^T \textbf{A} \textbf{z} = \lambda \textbf{z}^T \textbf{z}$
+% 
+% Now the left hand side is positive, as proved above. $\textbf{z}^T \textbf{z}$ is positive,
+ % because it is the dot product of a vector with itself. Hence, $\lambda$ must be non-negative.
+%
+% Similarly for $\textbf{A} \textbf{A}^T$, consider an eigenvector $\textbf{z}$ of dimension $m \times 1$. 
+% Multiplying the eigenvalue equation on the left by $\textbf{z}^T$ we get for some $\lambda$
+% $$\textbf{z}^T \textbf{A} \textbf{A}^T \textbf{z} = \lambda \textbf{z}^T \textbf{z}$
+% which again means $\lambda$ is non-negative.
+% 
+% Hence the eigenvalues of $\textbf{A}^T \textbf{A}$ and $\textbf{A} \textbf{A}^T$ are non-negative.
+% 
+%% Part b
+% If $\textbf{u}$ is an eigenvector of $\textbf{P}$ with eigenvalue $\lambda$, we have
+% $$\textbf{A}^T \textbf{A} \textbf{u} = \lambda \textbf{u}$
+% Pre-multiply by $\textbf{A}^T$ to give
+% 
+% $$\textbf{A} \textbf{A}^T \textbf{A} \textbf{u} = \textbf{A} \lambda \textbf{u}$
+% 
+% implying
+% $$\textbf{A} \textbf{A}^T \textbf{A} \textbf{u} = \lambda \textbf{A} \textbf{u}$
+% Thus $\textbf{Au}$ is an eigenvector of \textbf{Q} with eigenvalue $\lambda$.
+% 
+% Similarly, if $\textbf{v}$ is an eigenvector of $\textbf{Q}$ with eigenvalue $\mu$, we have by pre-multiplying with $\textbf{A}^T$
+% 
+% $$\textbf{A}^T \textbf{A} \textbf{A}^T \textbf{v} = \mu \textbf{A}^T \textbf{v}$
+% 
+% Thus $\textbf{A}^T \textbf{v}$ is an eigenvector of $\textbf{P}$ with eigenvalue $\mu$.
+% 
+% Clearly $\textbf{u}$ has $n$ elements and $\textbf{v}$ has $m$ elements.
+% 
+%% Part c
+% If $\textbf{v}_i$ is an eigenvector of $\textbf{Q}$, we have
+% $$\textbf{AA}^T \textbf{v}_i = \lambda_i \textbf{v}_i$
+% Defining $\textbf{u}_i$ as $$\textbf{u}_i = \frac{\textbf{A}^T \textbf{v}_i}{||\textbf{A}^T \textbf{v}_i||}$
+% and substituting it in the previous equation yields 
+% 
+% $$\textbf{Au}_i = \frac{\lambda_i}{||\textbf{A}^T \textbf{v}_i||} \textbf{v}_i$
+% 
+% 
+% Define $\gamma_i$ as $$\gamma_i = \frac{\lambda_i}{||\textbf{A}^T \textbf{v}_i||}$
+% 
+% Clearly $\gamma_i$ are non-negative because $\lambda_i$ are non-negative and the denominator being a norm is non-negative as well.
+% 
+% Thus there exist some real, non-negative $\gamma_i$ which satisfy
+% $$\textbf{Au}_i = \gamma_i \textbf{u}_i$$
+% 
+%% Part d
+% 
+% Consider the product $\textbf{U} \Gamma \textbf{V}^T$ with the matrices as defined in the question. 
+% 
+% We have
+% 
+% Thus
+% 
+% $$\textbf{U} \Gamma = [ \gamma_1 \textbf{v}_1 | \gamma_2 \textbf{v}_2 | \cdots | \gamma_m \textbf{v}_m ]$
+% 
+% From the previous part each $\gamma_{i} \textbf{v}_i$ can be written as
+% $$\gamma_{i} \textbf{v}_i = \textbf{Au}_i$
+% 
+% Thus $$\textbf{U} \Gamma = [ \textbf{Au}_1 | \textbf{Au}_2 | \cdots | \textbf{Au}_n ]$
+% 
+% which means
+% 
+% $$\textbf{U} \Gamma \textbf{V}^T = [ \textbf{Au}_1 | \textbf{Au}_2 | \cdots | \textbf{Au}_n ]  [ \textbf{u}_1 | \textbf{u}_2 | \cdots | \textbf{u}_n ]^T$
+% 
+% implying
+% 
+% $$\textbf{U} \Gamma \textbf{V}^T = \textbf{A} [ \textbf{u}_1 | \textbf{u}_2 | \cdots | \textbf{u}_n ]  [ \textbf{u}_1 | \textbf{u}_2 | \cdots | \textbf{u}_n ]^T$
+% 
+% Now given that $$\textbf{u}_i \textbf{u}_j = \delta_{ij}$ we have
+% 
+% $$A = \textbf{U} \Gamma \textbf{V}^T$
+% where $\Gamma$ is a matrix that has the non-negative $\gamma_i$ on its diagonal elements and zeros on the off-diagonal elements.
+% 
+% Thus we are done.
+##### SOURCE END #####
+--></body></html>
