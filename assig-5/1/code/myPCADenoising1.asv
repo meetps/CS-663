@@ -52,8 +52,7 @@ function [] = myPCADenoising1(im)
 
         end
     end
-    
-    rmsd = sqrt(sum(sum(im-outputImage)).^2)/(255*255)
+
     outputImage = outputImage./outputMask;
     figure;%('units','normalized','outerposition',[0 0 1 1]);
     subplot(1, 2, 1), imshow(im1/max(max(im1)));
