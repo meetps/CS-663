@@ -1,5 +1,6 @@
 function [] = myPCADenoising2()
-    
+
+    tic
     im = double(imread('../data/barbara256.png'));
     [imSizeX, imSizeY] = size(im);
 
@@ -63,4 +64,6 @@ function [] = myPCADenoising2()
     figure;
     subplot(1, 2, 1), imshow(im1/max(max(im1)));
     subplot(1, 2, 2), imshow(outputImage/max(max(outputImage)));
+    time = toc;
+    disp(num2str(time));
 end
