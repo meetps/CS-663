@@ -27,8 +27,10 @@ corruptedImage = inputImage + noise;
 
 [ spaceGaussian outputImage ] = myBilateralFiltering(corruptedImage,1.3,4,5);
 
-figure;
-subplot(1, 2, 1), imshow(corruptedImage);
-subplot(1, 2, 2), imshow(outputImage);
+figure;%('units','normalized','outerposition',[0 0 1 1]);
+subplot(1, 2, 1), imshow(mat2gray(corruptedImage));
+title('Original Image');
+subplot(1, 2, 2), imshow(mat2gray(outputImage));
+title('Bilaterally filtered Image');
 
 toc;

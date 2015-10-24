@@ -2,8 +2,8 @@ function [ spaceGaussian outputImage ]= myBilateralFiltering(origImage,SD_Space,
 
 %origImage, SD_Space, SD_Intensity, windowSize
 
-origImageStruct = load('../data/barbara.mat');
-origImage = origImageStruct.imageOrig;
+% origImageStruct = load('../data/barbara.mat');
+% origImage = origImageStruct.imageOrig;
 
 % SD_Space = 1;
 % SD_Intensity = 1;

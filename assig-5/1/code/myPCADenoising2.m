@@ -1,5 +1,10 @@
 function [] = myPCADenoising2(im)
-    
+%Function to perform PCA Deniosing 
+%   using only closest 200 patches 
+%   to create the eigen space
+
+    tic
+%     im = double(imread('../data/barbara256.png'));
     [imSizeX, imSizeY] = size(im);
 
     % im1 is the corrupted image
@@ -59,7 +64,12 @@ function [] = myPCADenoising2(im)
 
     outputImage = outputImage./outputMask;
     
-    figure;
+    rmsd = sqrt(sum(sum(im-outputImage)).^2)/(255*255)
+    figure;%('units','normalized','outerposition',[0 0 1 1]);
     subplot(1, 2, 1), imshow(im1/max(max(im1)));
+    title('Original Image');
     subplot(1, 2, 2), imshow(outputImage/max(max(outputImage)));
+    title('PCA-denoised Image');
+    time = toc;
+    disp(num2str(time));
 end
