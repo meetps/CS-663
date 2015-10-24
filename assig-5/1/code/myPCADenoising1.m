@@ -1,8 +1,7 @@
-function [] = myPCADenoising1()
-%UNTITLED Summary of this function goes here
+function [] = myPCADenoising1(im)
+%Function to perform PCA Deniosing 
 %   Detailed explanation goes here
     
-    im = double(imread('../data/barbara256.png'));
     [imSizeX, imSizeY] = size(im);
 
     % im1 is the corrupted image

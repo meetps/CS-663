@@ -1,6 +1,5 @@
-function [] = myPCADenoising2()
+function [] = myPCADenoising2(im)
     
-    im = double(imread('../data/barbara256.png'));
     [imSizeX, imSizeY] = size(im);
 
     % im1 is the corrupted image
