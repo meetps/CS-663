@@ -12,33 +12,25 @@ function [] = myPCADenoising2(im)
         for j=1:imSizeY-6
 
             % Generate the subimage
-            prinPatch = reshape(im1(i:i+6, j:j+6), 1, 49);
+            prinPatch = reshape(im1(i:i+6, j:j+6), 49, 1);
 
             xMin = max(i-15,1);
             xMax = min(i+15-6,imSizeX-6);
             yMin = max(j-15,1);
             yMax = min(j+15-6,imSizeY-6);
 
-            patches = zeros([(xMax-xMin+1)*(yMax-yMin+1) 49]);
-%             rmsds = zeros([1 (xMax-xMin+1)*(yMax-yMin+1)]);
+            patches = zeros([49 (xMax-xMin+1)*(yMax-yMin+1)]);
 
             for k=xMin:xMax
                 for l=yMin:yMax
-
-                    patch = reshape(im(k:k+6, l:l+6), 1, 49);
-%                     rmsd = sqrt(sum((patch-prinPatch).^2));
-                    patches((xMax-xMin+1)*(k-xMin+1)-(xMax-xMin+1)+(l-yMin+1),:) = patch;
-%                     rmsds((xMax-xMin+1)*(k-xMin+1)-(xMax-xMin+1)+(l-yMin+1)) = rmsd;
-
+                    patch = reshape(im(k:k+6, l:l+6), 49, 1);
+                    patches(:,(xMax-xMin+1)*(k-xMin+1)-(xMax-xMin+1)+(l-yMin+1)) = patch;
                 end
             end
 
-%             [sortedRmsd,sortOrder]=sort(rmsds, 'ascend');
-%             sortedPatches = patches(:, sortOrder);
-%             sortedPatchesSize = size(sortedPatches);
-            patchIndices = knnsearch(patches, prinPatch, 'k', 200);
-            selectedPatches = patches(patchIndices,:);
-            selectedPatches = transpose(selectedPatches);
+            patchIndices = knnsearch(transpose(patches), transpose(prinPatch), 'k', 200);
+            selectedPatches = patches(:,patchIndices);
+%             selectedPatches = transpose(selectedPatches);
 
             % Get eigenvectors
             L = selectedPatches*transpose(selectedPatches);
