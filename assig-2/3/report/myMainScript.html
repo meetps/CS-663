@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"><!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+
+    <title>myMainScript</title>
+    <meta content="MATLAB 8.4" name="generator">
+    <link href="http://purl.org/dc/elements/1.1/" rel="schema.DC">
+    <meta content="2015-08-30" name="DC.date">
+    <meta content="myMainScript.m" name="DC.source">
+    <style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+    html { min-height:100%; margin-bottom:1px; }
+    html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+    html body td { vertical-align:top; text-align:left; }
+
+    h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+    h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+    h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+    a { color:#005fce; text-decoration:none; }
+    a:hover { color:#005fce; text-decoration:underline; }
+    a:visited { color:#004aa0; text-decoration:none; }
+
+    p { padding:0px; margin:0px 0px 20px; }
+    img { padding:0px; margin:0px 0px 20px; border:none; }
+    p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+    ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+    ul li { padding:0px; margin:0px 0px 7px 0px; }
+    ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+    ul li ol li { list-style:decimal; }
+    ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+    ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+    ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+    ol li ol li { list-style-type:lower-alpha; }
+    ol li ul { padding-top:7px; }
+    ol li ul li { list-style:square; }
+
+    .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+    pre, code { font-size:12px; }
+    tt { font-size: 1.2em; }
+    pre { margin:0px 0px 20px; }
+    pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+    pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+    pre.error { color:red; }
+
+    @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+    span.keyword { color:#0000FF }
+    span.comment { color:#228B22 }
+    span.string { color:#A020F0 }
+    span.untermstring { color:#B20000 }
+    span.syscmd { color:#B28C00 }
+
+    .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+    .footer p { margin:0px; }
+    .footer a { color:#878787; }
+    .footer a:hover { color:#878787; text-decoration:underline; }
+    .footer a:visited { color:#878787; }
+
+    table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+    table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <h2>Contents</h2>
+
+        <div>
+            <ul>
+                <li>
+                    <a href="#2">Patch Based Filtering</a>
+                </li>
+            </ul>
+        </div>
+        <pre class="codeinput">
+tic;
+</pre>
+
+        <h2>Patch Based Filtering<a id="2" name="2"></a></h2>
+        <pre class="codeinput">
+<span class="comment">%Loading Input Image</span>
+imgpath = <span class="string">'../data/barbara.mat'</span>
+inputStruct = load(imgpath);
+inputImage = inputStruct.imageOrig;
+
+<span class=
+"comment">%Filtering with optimum sd = 4 and sd*1.1 and sd*0.9</span>
+sd_array = [4.05,4.5,4.95];
+
+<span class="comment">% Filtering Image with Optimal Value</span>
+windowSize = 12;
+patchSize = 4;
+<span class="comment">% Adding gaussion noise to image</span>
+[ img_x, img_y ] = size(inputImage);
+noise = 0.05*max(max(inputImage))*randn([img_x img_y]);
+corruptedImage = inputImage + noise;
+
+<span class="keyword">for</span> i=1:3
+    filteredImage = myPatchBasedFiltering(corruptedImage, windowSize, patchSize, sd_array(i));
+
+    <span class="comment">%Calculating RMSD</span>
+    diffImage = filteredImage - inputImage;
+    RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
+
+    <span class="comment">%Display Images</span>
+        iptsetpref(<span class="string">'ImshowAxesVisible'</span>,<span class=
+"string">'on'</span>);
+        figure(<span class="string">'units'</span>,<span class=
+"string">'normalized'</span>,<span class=
+"string">'outerposition'</span>,[0 0 1 1])
+        mainFig= subplot(1,3,1);
+        imshow(mat2gray(inputImage)), colorbar;
+        title(<span class="string">'Input Image'</span>)
+        subplot(1,3,2);
+        imshow(mat2gray(corruptedImage)), colorbar;
+        title(<span class="string">'Noisy Image'</span>)
+        subplot(1,3,3);
+        imshow(mat2gray(filteredImage)), colorbar;
+        title(<span class="string">'Patch Filtered Image'</span>)
+
+        disp(RMSD);
+    <span class="comment">%Save Image</span>
+        name = strcat([<span class=
+"string">'../images/patch_filtered_'</span> num2str(sd_array(i)) <span class=
+"string">'_'</span> imgpath(9:length(imgpath)-3)]);
+        file_name = strcat([name <span class="string">'png'</span>])
+        imwrite(mat2gray(filteredImage),file_name);
+<span class="keyword">end</span>
+
+toc;
+</pre>
+        <pre class="codeoutput">
+Elapsed time is 4341.954026 seconds.
+
+
+</pre>
+
+
+<h2> <center><br> gaussian 9x9 mask </br> </center></h2>
+<img alt="" hspace="5" src="mask.png" vspace="5">
+
+<h2> <center> RMSD = 3.2511
+	<br> standard dev = 4.5  "Optimum value"  </br>
+	 file_name = ../images/patch_filtered_4.05_barbara.png</center> </h2>
+<img alt="" hspace="5" src="myMainScript_05.png" vspace="5"> 
+
+<h2> <center> RMSD = 3.4319
+	<br> standard dev = 0.9*sd_space = 4.05 </br> 
+	file_name = ../images/patch_filtered_4.5_barbara.png</center> </h2>
+	
+<img alt="" hspace="5" src="myMainScript_04.png" vspace="5"> 
+
+<h2> <center> RMSD = 3.2088
+	<br> standard dev = 1.1*sd_space = 4.95 </br> 
+	file_name = ../images/patch_filtered_4.95_barbara.png</center> </h2>
+<img alt="" hspace="5" src="myMainScript_07.png" vspace="5">
+
+<h1> <center> Extra Images 
+<br> (With other standard dev values) </br></center> </h1>
+<h2> <br> standard dev = 2 </br> 
+	file_name = ../images/patch_filtered_2_barbara.png</center> </h2>
+<img alt="" hspace="5" src="patch_filtered_final_2_barbara.png" vspace="5">
+
+
+<h2> <br> standard dev = 6 </br> 
+	file_name = ../images/patch_filtered_6_barbara.png</center> </h2>
+<img alt="" hspace="5" src="patch_filtered_final_6_barbara.png" vspace="5">
+
+<h2> <br> standard dev = 8 </br> 
+	file_name = ../images/patch_filtered_8_barbara.png</center> </h2>
+<img alt="" hspace="5" src="patch_filtered_final_8_barbara.png" vspace="5">
+
+		
+		
+		<p class="footer"><br>
+        <a href="http://www.mathworks.com/products/matlab/">Published with
+        MATLAB&reg; R2014b</a><br></p>
+    </div><!--
+##### SOURCE BEGIN #####
+tic;
+
+%% Patch Based Filtering
+
+%Loading Input Image
+imgpath = '../data/barbara.mat'
+inputStruct = load(imgpath);
+inputImage = inputStruct.imageOrig;
+
+%Filtering with optimum sd = 4 and sd*1.1 and sd*0.9
+sd_array = [4.05,4.5,4.95]; 
+
+% Filtering Image with Optimal Value
+windowSize = 12;
+patchSize = 4;
+% Adding gaussion noise to image 
+[ img_x, img_y ] = size(inputImage);
+noise = 0.05*max(max(inputImage))*randn([img_x img_y]);
+corruptedImage = inputImage + noise;
+
+for i=1:3
+    filteredImage = myPatchBasedFiltering(corruptedImage, windowSize, patchSize, sd_array(i));
+    
+    %Calculating RMSD
+    diffImage = filteredImage - inputImage;
+    RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
+
+    %Display Images
+        iptsetpref('ImshowAxesVisible','on');
+        figure('units','normalized','outerposition',[0 0 1 1])
+        mainFig= subplot(1,3,1);
+        imshow(mat2gray(inputImage)), colorbar;
+        title('Input Image')
+        subplot(1,3,2);
+        imshow(mat2gray(corruptedImage)), colorbar;
+        title('Noisy Image')
+        subplot(1,3,3);
+        imshow(mat2gray(filteredImage)), colorbar;
+        title('Patch Filtered Image')
+        
+        disp(RMSD);
+    %Save Image 
+        name = strcat(['../images/patch_filtered_' num2str(sd_array(i)) '_' imgpath(9:length(imgpath)-3)]);
+        file_name = strcat([name 'png'])
+        imwrite(mat2gray(filteredImage),file_name);
+end
+
+toc;
+
+##### SOURCE END #####
+-->
+</body>
+</html>

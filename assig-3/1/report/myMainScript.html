@@ -1,0 +1,245 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-09-20"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul>
+  <li><a href="#1">MyMainScript</a></li>
+  <li><a href="#2">ButterWorth Filter Part</a></li>
+  <li><a href="#3">Energy Radius Part</a></li>
+
+  </ul></div><h2>MyMainScript<a name="1"></a></h2><pre class="codeinput">tic;
+
+<span class="comment">%Take Input</span>
+inputStruct = load(<span class="string">'../data/boat.mat'</span>);
+inputImage = inputStruct.imageOrig;
+[ img_x, img_y ] = size(inputImage);
+
+<span class="comment">% min(RMSD) = at D0* = 84</span>
+d0 = 84;
+
+<span class="comment">% Display the ButterWorth Filter (2nd order ,ctuoff =83)</span>
+[H, filteredImage] = myButterWorthFiltering(inputImage,2,d0);
+imshow(H),colorbar;title(<span class="string">'ButterWorth Filter in Frequency Domain'</span>)
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <h2>ButterWorth Filter Part<a name="2"></a></h2><pre class="codeinput">frequency_cutoff_array = [.95, 1 ,1.05];
+
+<span class="keyword">for</span> i=1:3
+
+	<span class="comment">%Normalize Image to range(0,1)</span>
+	normazlizedImage = inputImage/255;
+
+	<span class="comment">%Add gaussion noise with s.d = .1 and mean =0</span>
+	noisyImage = imnoise(normazlizedImage,<span class="string">'gaussian'</span>,0,0.01)*255;
+
+	<span class="comment">% Apply Filter</span>
+	[H, filteredImage] = myButterWorthFiltering(noisyImage,2,frequency_cutoff_array(i)*d0);
+
+		<span class="comment">%Calculating RMSD</span>
+		diffImage = filteredImage - inputImage;
+		RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
+
+		disp([<span class="string">'RMSD ='</span> num2str(RMSD)]);
+
+		<span class="comment">%Display Images</span>
+			iptsetpref(<span class="string">'ImshowAxesVisible'</span>,<span class="string">'on'</span>);
+			figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+			mainFig= subplot(1,3,1);
+			imshow(mat2gray(inputImage)), colorbar;
+			title(<span class="string">'Input Image'</span>)
+			subplot(1,3,2);
+			imshow(mat2gray(noisyImage)), colorbar;
+			title(<span class="string">'Noisy Image'</span>)
+			subplot(1,3,3);
+			imshow(mat2gray(filteredImage)), colorbar;
+			title([<span class="string">'Filtered Image for D0*'</span> num2str(frequency_cutoff_array(i))])
+
+		<span class="comment">%Save Image</span>
+		name = strcat([<span class="string">'../images/butterworth_filter_final_'</span> num2str(frequency_cutoff_array(i)) <span class="string">'.'</span>]);
+		file_name = strcat([name <span class="string">'png'</span>])
+		imwrite(mat2gray(filteredImage),file_name);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+</pre>
+
+
+<h2>
+RMSD =11.2473
+</h2>
+<img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> 
+
+
+<h2>
+RMSD =11.2081
+</h2>
+<img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> 
+
+<h2>
+RMSD =11.2799
+</h2>
+<img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> 
+
+
+
+<h2>Energy Radius Part<a name="3"></a></h2><pre class="codeinput"><span class="comment">% The Following Table encapsulates the enrgy percent vs Radii data</span>
+    <span class="comment">%  93.59 - 4</span>
+    <span class="comment">%  90.69 - 2.225</span>
+    <span class="comment">%  90.53 - 1.4</span>
+    <span class="comment">%  97.13 - 15</span>
+    <span class="comment">%  99.026 - 60</span>
+
+nearest_percentage_array = [88,91,94,97,99];
+radius_array = [1.422,2.225,4,15,60];
+RMSD_array = [0,0,0,0,0];
+percentage_array = [0,0,0,0,0];
+
+<span class="keyword">for</span> i=1:5
+
+	F=fft2(inputImage);
+	F=fftshift(F);
+
+	<span class="comment">%Calculating the Energy of Fourier Transform</span>
+	Energy = sum(sum((abs(F)).^2));
+
+	<span class="comment">% Deduce Filter for image</span>
+	diskfilter = diskFilter(F,radius_array(i));
+	filteredImage = F.*diskfilter;
+
+	<span class="comment">%Calculate Percentage Energy in disked image</span>
+	FilteredImageEnergy = sum(sum(abs(filteredImage).^2));
+	percentage = FilteredImageEnergy/Energy*100;
+	percentage_array(i) = percentage;
+	disp([<span class="string">'Percentage = '</span> num2str(percentage)]);
+
+
+	<span class="comment">% Applying the Filter to the  Orig Image</span>
+	inverseImage = ifft2(filteredImage);
+	outputImage=sqrt(real(inverseImage).^2+imag(inverseImage).^2);
+
+	<span class="comment">%Display Images</span>
+			iptsetpref(<span class="string">'ImshowAxesVisible'</span>,<span class="string">'on'</span>);
+			figure(<span class="string">'units'</span>,<span class="string">'normalized'</span>,<span class="string">'outerposition'</span>,[0 0 1 1])
+			mainFig= subplot(1,2,1);
+			imshow(mat2gray(inputImage)), colorbar;
+			title(<span class="string">'Original Image'</span>)
+			subplot(1,2,2);
+			imshow(mat2gray(outputImage)), colorbar;
+			title([<span class="string">'Image with filter of radius = '</span> num2str(radius_array(i))]);
+	<span class="comment">%Save Image</span>
+		name = strcat([<span class="string">'../images/energy_analysis_final_'</span> num2str(nearest_percentage_array(i)) <span class="string">'.'</span>]);
+		file_name = strcat([name <span class="string">'png'</span>])
+		imwrite(mat2gray(outputImage),file_name);
+
+	<span class="comment">%Calculating RMSD between Orig Image and Filtered Image</span>
+	diffImage = outputImage - inputImage;
+	RMSD = sqrt(sum(sum(diffImage.^2))/(img_y*img_x));
+	RMSD_array(i) = RMSD;
+	disp([<span class="string">'RMSD ='</span> num2str(RMSD)]);
+<span class="keyword">end</span>
+toc;
+</pre><pre class="codeoutput">
+
+
+
+
+Elapsed time is 26.176595 seconds.
+</pre>
+
+
+<h2>
+DC Offset = 8.735e+05
+</h2>
+
+<h2>
+Percentage = 90.5633 RMSD =40.0996
+</h2>
+<img vspace="5" hspace="5" src="myMainScript_05.png" alt="">
+
+
+<h2>
+Percentage = 90.6931 RMSD =39.7017
+</h2>
+<img vspace="5" hspace="5" src="myMainScript_06.png" alt=""> 
+
+
+<h2>
+Percentage = 93.5549 RMSD =33.8558
+</h2>
+<img vspace="5" hspace="5" src="myMainScript_07.png" alt=""> 
+
+
+<h2>
+Percentage = 97.1304 RMSD =23.1122
+</h2>
+<img vspace="5" hspace="5" src="myMainScript_08.png" alt=""> 
+
+<h2>
+Percentage = 99.026 RMSD =13.5454
+</h2>
+<img vspace="5" hspace="5" src="myMainScript_09.png" alt=""> 
+
+
+<p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+</body></html>

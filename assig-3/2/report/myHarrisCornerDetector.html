@@ -1,0 +1,147 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>myHarrisCornerDetector</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-09-20"><meta name="DC.source" content="myHarrisCornerDetector.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">function</span> [] = myHarrisCornerDetector()
+
+    imstruct = load(<span class="string">'../data/boat.mat'</span>);
+    img=imstruct.imageOrig; <span class="comment">% Step 0: Read Image</span>
+    figure, imshow(mat2gray(img)),colorbar;title(<span class="string">'Original Image'</span>);
+    I=im2double(img);
+    I = I/max(max(I));
+    G = fspecial(<span class="string">'gaussian'</span>, [3 3] ,1);
+    I = imfilter(I, G, <span class="string">'same'</span>);
+    figure, imshow(mat2gray(I)),colorbar;title(<span class="string">'Smoothened Image after Gaussion Filter'</span>);
+<span class="comment">%     dx = [-1 0 1; -1 0 1; -1 0 1]; % image derivatives</span>
+<span class="comment">%     dy = dx';</span>
+<span class="comment">%     Ix = imfilter(I, dx);    % Step 1: Compute the image derivatives Ix and Iy</span>
+<span class="comment">%     Iy = imfilter(I, dy);</span>
+    [Ix Iy] = imgradientxy(I);
+
+    g = fspecial(<span class="string">'gaussian'</span>, [6 6] ,2); <span class="comment">% Step 2: Generate Gaussian filter 'g' of size 9x9 and standard deviation Sigma=2.</span>
+    Ix2 = imfilter(Ix.^2, g, <span class="string">'same'</span>); <span class="comment">% Step 3: Smooth the squared image derivatives to obtain Ix2, Iy2 and IxIy</span>
+    figure, imshow(mat2gray(Ix2)),colorbar;title(<span class="string">'X derivative'</span>);
+    Iy2 = imfilter(Iy.^2, g, <span class="string">'same'</span>);
+    figure, imshow(mat2gray(Iy2)),colorbar;title(<span class="string">'Y derivative'</span>);
+    IxIy = imfilter(Ix.*Iy, g, <span class="string">'same'</span>);
+    figure, imshow(mat2gray(IxIy)),colorbar,title(<span class="string">'Derivative Product Ix*Iy'</span>); <span class="comment">%Display the images obtained in different steps</span>
+
+    [r c]=size(Ix2);
+    R = zeros(r, c);
+	cornerMeasure = zeros(r, c);
+	E1 = zeros(r, c); <span class="comment">% Compute matrix E</span>
+    E2 = zeros(r, c);
+
+    k = 0.06;
+
+    <span class="keyword">for</span> i=2:r-1
+        <span class="keyword">for</span> j=2:c-1
+         Ix21=sum(sum(Ix2(i-1:i+1,j-1:j+1)));
+         Iy21=sum(sum(Iy2(i-1:i+1,j-1:j+1)));
+         IxIy1= sum(sum(IxIy(i-1:i+1,j-1:j+1)));
+
+         M=[Ix21, IxIy1; IxIy1, Iy21];
+         e = eig(M);
+         E1(i,j)=min(e);
+         E2(i,j)=max(e);
+
+		 R(i,j) = e(1)*e(2)-k*(e(1)+e(2))^2; <span class="comment">%(1) Build autocorrelation matrix for every singe pixel considering a window of size 3x3</span>
+
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    superposed = zeros(r, c);
+    cornerMeasure = (R&gt;0.5)*250;
+    superposed = img+cornerMeasure;
+    figure, imshow(mat2gray(E1)),colorbar;title(<span class="string">'Eigenvalue 1'</span>); <span class="comment">% display result</span>
+    figure, imshow(mat2gray(E2)),colorbar;title(<span class="string">'Eigenvalue 2'</span>);
+
+    figure, imshow(mat2gray(cornerMeasure)),colorbar;title(<span class="string">'Corner Measure'</span>); <span class="comment">% display result</span>
+    figure, imshow(mat2gray(superposed)),colorbar;title(<span class="string">'Superposed'</span>);
+
+<span class="comment">%     Maximal Supression
+<span class="comment">%     R1= ordfilt2(R,121,ones(11));% Get the coordinates with maximum cornerness responses</span>
+<span class="comment">%     R2=(R1==R) &amp; (R &gt; 10);</span>
+<span class="comment">%     [sortR2,R2IX] = sort(R2(:),'descend');</span>
+<span class="comment">%     [a, b] = ind2sub([r c],R2IX); %The mapping from linear indexes to subscript equivalents for the matrix</span>
+<span class="comment">%     title; figure, imshow(I, []); hold on; xlabel('Max 81 points'); %labeling along with X axis</span>
+<span class="comment">%     for i=1:81</span>
+<span class="comment">%         plot(a(i), b(i), 'r+');</span>
+<span class="comment">%     end</span>
+
+<span class="keyword">end</span>
+
+</pre>
+
+<h1> Parameters Involved</h1>
+
+<h2> k = 0.06 </h2>
+<h2> Gaussion Kernel Used for Smoothing with s.d. = 1 and windowSize = 3</h2>
+<h2> Gaussion Kernel Used for Derivative with s.d. = 2 and windowSize = 6</h2>
+
+<img vspace="5" hspace="5" src="myHarrisCornerDetector_01.png" alt=""> <img vspace="5" hspace="5" src="myHarrisCornerDetector_02.png" alt=""> <img vspace="5" hspace="5" src="myHarrisCornerDetector_03.png" alt=""> <img vspace="5" hspace="5" src="myHarrisCornerDetector_04.png" alt=""> <img vspace="5" hspace="5" src="myHarrisCornerDetector_05.png" alt=""> <img vspace="5" hspace="5" src="myHarrisCornerDetector_06.png" alt=""> <img vspace="5" hspace="5" src="myHarrisCornerDetector_07.png" alt=""> <img vspace="5" hspace="5" src="myHarrisCornerDetector_08.png" alt=""> <img vspace="5" hspace="5" src="myHarrisCornerDetector_09.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+--></body></html>
