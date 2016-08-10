@@ -1,4 +1,6 @@
-# CS-663 Assignments.
+# CS-663 Digital Image Processing
+
+## Assignments
 
 ### Assignment 1
 
